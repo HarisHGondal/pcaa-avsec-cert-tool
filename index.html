@@ -124,202 +124,180 @@
             @page { size: A4 landscape; margin: 0; }
         }
 
-        /* ─── CLASSIC (TRADITIONAL) ─── */
+        /* ─── SOVEREIGN (classic) — Deep navy authority ─── */
         #container-classic {
             height: 100%; display: grid;
             grid-template-rows: auto 1fr auto;
             background: #fff; box-sizing: border-box;
-            border: 14px solid #006e96; position: relative;
         }
-        #container-classic::before {
-            content: ''; position: absolute; inset: 5px;
-            border: 1px solid #b49605; pointer-events: none; z-index: 1;
-        }
-        .classic-header { padding: 22px 50px 14px; border-bottom: 2px solid #e8e0cc; display: flex; align-items: center; gap: 20px; }
-        .classic-body { padding: 20px 50px; display: flex; flex-direction: column; justify-content: center; }
-        .classic-footer { padding: 14px 50px 22px; border-top: 2px solid #e8e0cc; display: flex; justify-content: space-between; align-items: flex-end; }
-        .classic-ref { font-size: 9.5px; letter-spacing: 0.1em; color: #888; text-transform: uppercase; }
-        .classic-title { font-family: 'Cinzel', serif; font-size: 24px; font-weight: 700; color: #006e96; margin-bottom: 1px; }
-        .classic-subtitle { font-size: 11px; color: #b49605; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; }
-        .classic-certifies { font-family: 'EB Garamond', serif; font-size: 15px; color: #555; font-style: italic; margin-bottom: 8px; }
-        .classic-orgname { font-family: 'Cinzel', serif; font-size: 20px; color: #006e96; font-weight: 700; margin-bottom: 2px; }
-        .classic-address { font-size: 12px; color: #777; margin-bottom: 6px; }
-        .classic-issuedto { font-size: 12px; color: #444; margin-bottom: 10px; padding: 6px 10px; background: #f8f6f0; border-left: 3px solid #b49605; border-radius: 0 4px 4px 0; }
-        .classic-issuedto strong { color: #006e96; font-weight: 700; }
-        .classic-scope-label { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #b49605; margin-bottom: 3px; }
-        .classic-scope { font-family: 'EB Garamond', serif; font-size: 15px; color: #444; line-height: 1.65; }
-        .classic-expiry { font-size: 12px; color: #555; margin-top: 10px; font-weight: 500; }
-        .classic-expiry span { color: #006e96; font-weight: 700; }
-        .classic-sig-label { font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #999; }
-        .classic-sig-name { font-family: 'Alex Brush', cursive; font-size: 30px; color: #006e96; line-height: 1.1; }
-        .classic-sig-title { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #444; }
-        .classic-addressed { font-size: 9px; color: #888; margin-top: 2px; }
-        .classic-seal { width: 70px; height: 70px; border-radius: 50%; border: 2px dashed #b49605; display: flex; align-items: center; justify-content: center; color: #b49605; font-size: 22px; opacity: 0.5; }
+        .sov-header { background: #0a1f44; padding: 18px 50px; display: flex; align-items: center; gap: 20px; border-bottom: 3px solid #c9a227; }
+        .sov-body { padding: 20px 50px; display: flex; flex-direction: column; justify-content: center; }
+        .sov-footer { background: #0a1f44; padding: 14px 50px; display: flex; justify-content: space-between; align-items: center; border-top: 3px solid #c9a227; }
+        .sov-pcaa { font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+        .sov-title { font-family: 'Cinzel', serif; font-size: 23px; font-weight: 700; color: #fff; }
+        .sov-subtitle { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: #c9a227; margin-top: 3px; }
+        .sov-certifies { font-family: 'EB Garamond', serif; font-size: 15px; color: #4b5563; font-style: italic; margin-bottom: 8px; }
+        .sov-orgname { font-family: 'Cinzel', serif; font-size: 22px; color: #0a1f44; font-weight: 700; margin-bottom: 2px; }
+        .sov-address { font-size: 12px; color: #6b7280; margin-bottom: 8px; }
+        .sov-issuedto { font-size: 12px; color: #1f2937; padding: 5px 12px; background: #f0f4ff; border-left: 3px solid #c9a227; margin-bottom: 10px; }
+        .sov-issuedto strong { color: #0a1f44; font-weight: 700; }
+        .sov-rule { border: none; border-top: 1px solid #e5e7eb; margin: 10px 0; }
+        .sov-scope-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #9ca3af; margin-bottom: 4px; }
+        .sov-scope { font-family: 'EB Garamond', serif; font-size: 15px; color: #1f2937; line-height: 1.65; }
+        .sov-expiry { font-size: 12px; color: #6b7280; margin-top: 10px; font-weight: 500; }
+        .sov-expiry span { color: #0a1f44; font-weight: 700; }
+        .sov-sig-name { font-family: 'Alex Brush', cursive; font-size: 32px; color: #c9a227; line-height: 1; }
+        .sov-sig-line { height: 1px; width: 150px; background: rgba(201,162,39,0.5); margin: 4px 0; }
+        .sov-sig-title { font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+        .sov-ref { font-size: 9px; color: rgba(255,255,255,0.5); text-align: right; letter-spacing: 0.05em; }
+        .sov-addressed { font-size: 8px; color: rgba(255,255,255,0.3); margin-top: 3px; text-align: right; }
 
-        /* ─── MINIMAL ─── */
+        /* ─── EMERALD (minimal) — Forest green prestige ─── */
         #container-minimal {
             height: 100%; display: grid;
             grid-template-rows: auto 1fr auto;
-            background: #fcfaf7; box-sizing: border-box;
-            border-top: 4px solid #1e293b; border-bottom: 4px solid #1e293b;
+            background: #fff; box-sizing: border-box;
+            border-left: 10px solid #155740;
         }
-        .minimal-header { padding: 26px 55px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; }
-        .minimal-body { padding: 22px 55px; display: flex; flex-direction: column; justify-content: center; }
-        .minimal-footer { padding: 16px 55px 26px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: flex-end; }
-        .minimal-ref { font-size: 9px; letter-spacing: 0.2em; color: #94a3b8; text-transform: uppercase; }
-        .minimal-title { font-size: 22px; font-weight: 300; letter-spacing: 0.22em; text-transform: uppercase; color: #1e293b; margin-bottom: 2px; }
-        .minimal-subtitle { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: #94a3b8; }
-        .minimal-certifies { font-size: 14px; color: #64748b; font-style: italic; margin-bottom: 8px; }
-        .minimal-orgname { font-size: 21px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
-        .minimal-address { font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
-        .minimal-issuedto { font-size: 12px; color: #334155; margin-bottom: 10px; padding: 5px 10px; background: #f8fafc; border-left: 2px solid #1e293b; }
-        .minimal-issuedto strong { font-weight: 700; color: #1e293b; }
-        .minimal-divider { border: none; border-top: 1px solid #e2e8f0; margin: 0 0 12px; }
-        .minimal-scope-label { font-size: 8.5px; letter-spacing: 0.25em; text-transform: uppercase; color: #94a3b8; margin-bottom: 4px; }
-        .minimal-scope { font-size: 14px; color: #475569; line-height: 1.65; }
-        .minimal-expiry { font-size: 12px; color: #94a3b8; margin-top: 10px; letter-spacing: 0.05em; font-weight: 500; }
-        .minimal-expiry span { color: #1e293b; font-weight: 700; }
-        .minimal-sig-name { font-family: 'Alex Brush', cursive; font-size: 28px; color: #1e293b; line-height: 1.1; }
-        .minimal-sig-title { font-size: 8.5px; letter-spacing: 0.15em; text-transform: uppercase; color: #94a3b8; }
-        .minimal-addressed { font-size: 8.5px; color: #b0bec5; margin-top: 1px; }
+        .em-header { padding: 22px 50px 16px 40px; display: flex; align-items: center; gap: 20px; border-bottom: 1px solid #d1e7dd; }
+        .em-body { padding: 20px 50px 20px 40px; display: flex; flex-direction: column; justify-content: center; }
+        .em-footer { padding: 14px 50px 20px 40px; border-top: 1px solid #d1e7dd; display: flex; justify-content: space-between; align-items: flex-end; background: #f6fdf9; }
+        .em-tag { display: inline-block; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: #fff; background: #155740; padding: 2px 8px; border-radius: 2px; margin-bottom: 4px; }
+        .em-title { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700; color: #155740; }
+        .em-subtitle { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #4a7c59; margin-top: 2px; }
+        .em-ref { font-size: 9px; color: #94a3b8; text-align: right; }
+        .em-certifies { font-family: 'EB Garamond', serif; font-size: 15px; color: #4b5563; font-style: italic; margin-bottom: 8px; }
+        .em-orgname { font-size: 22px; font-weight: 800; color: #155740; margin-bottom: 2px; }
+        .em-address { font-size: 12px; color: #6b7280; margin-bottom: 8px; }
+        .em-issuedto { font-size: 12px; color: #1f2937; padding: 5px 10px; background: #f0fdf4; border-left: 3px solid #155740; margin-bottom: 10px; }
+        .em-issuedto strong { color: #155740; font-weight: 700; }
+        .em-divider { border: none; border-top: 1px solid #d1e7dd; margin: 0 0 10px; }
+        .em-scope-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: #6b7280; margin-bottom: 4px; }
+        .em-scope { font-size: 14px; color: #374151; line-height: 1.65; }
+        .em-expiry { font-size: 12px; color: #6b7280; margin-top: 10px; font-weight: 500; }
+        .em-expiry span { color: #155740; font-weight: 700; }
+        .em-sig-name { font-family: 'Alex Brush', cursive; font-size: 30px; color: #155740; line-height: 1; }
+        .em-sig-line { height: 1px; width: 140px; background: #b7ddc9; margin: 4px 0; }
+        .em-sig-title { font-size: 8.5px; letter-spacing: 0.12em; text-transform: uppercase; color: #4a7c59; }
+        .em-addressed { font-size: 8.5px; color: #94a3b8; margin-top: 2px; }
 
-        /* ─── EXECUTIVE ─── */
+        /* ─── CARBON (executive) — Dark luxury ─── */
         #container-executive {
             height: 100%; display: grid;
             grid-template-rows: auto 1fr auto;
-            background: #1a1a2e; color: #e8dfc8; box-sizing: border-box;
-            position: relative; overflow: hidden;
+            background: #f8f8f8; box-sizing: border-box;
         }
-        #container-executive::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
-            background: linear-gradient(90deg, #b49605, #e8c84c, #b49605);
-        }
-        #container-executive::after {
-            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 5px;
-            background: linear-gradient(90deg, #b49605, #e8c84c, #b49605);
-        }
-        .exec-corner { position: absolute; width: 60px; height: 60px; border-color: #b49605; border-style: solid; opacity: 0.5; }
-        .exec-corner-tl { top: 14px; left: 14px; border-width: 1px 0 0 1px; }
-        .exec-corner-tr { top: 14px; right: 14px; border-width: 1px 1px 0 0; }
-        .exec-corner-bl { bottom: 14px; left: 14px; border-width: 0 0 1px 1px; }
-        .exec-corner-br { bottom: 14px; right: 14px; border-width: 0 1px 1px 0; }
-        .exec-header { padding: 26px 50px 16px; border-bottom: 1px solid rgba(180,150,5,0.25); display: flex; align-items: center; justify-content: space-between; }
-        .exec-body { padding: 22px 50px; display: flex; flex-direction: column; justify-content: center; }
-        .exec-footer { padding: 16px 50px 26px; border-top: 1px solid rgba(180,150,5,0.25); display: flex; justify-content: space-between; align-items: flex-end; }
-        .exec-ref { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #b49605; opacity: 0.8; }
-        .exec-title { font-family: 'Cinzel', serif; font-size: 24px; font-weight: 700; color: #e8dfc8; letter-spacing: 0.05em; margin-bottom: 2px; }
-        .exec-subtitle { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: #b49605; }
-        .exec-certifies { font-size: 14px; color: #a0a8b8; font-style: italic; margin-bottom: 8px; }
-        .exec-orgname { font-family: 'Cinzel', serif; font-size: 21px; color: #e8dfc8; font-weight: 600; margin-bottom: 2px; }
-        .exec-address { font-size: 12px; color: #6b7280; margin-bottom: 6px; }
-        .exec-issuedto { font-size: 12px; color: #c4bbaa; margin-bottom: 10px; padding: 5px 12px; border-left: 2px solid rgba(180,150,5,0.6); background: rgba(255,255,255,0.04); }
-        .exec-issuedto strong { color: #b49605; font-weight: 700; }
-        .exec-scope-label { font-size: 8.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #b49605; margin-bottom: 4px; }
-        .exec-scope { font-size: 14px; color: #c4bbaa; line-height: 1.65; border-left: 2px solid rgba(180,150,5,0.4); padding-left: 12px; }
-        .exec-expiry { font-size: 12px; color: #6b7280; margin-top: 10px; letter-spacing: 0.08em; font-weight: 500; }
-        .exec-expiry span { color: #b49605; font-weight: 700; }
-        .exec-sig-name { font-family: 'Alex Brush', cursive; font-size: 30px; color: #b49605; line-height: 1.1; }
-        .exec-sig-title { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #6b7280; }
-        .exec-addressed { font-size: 9px; color: #4b5563; margin-top: 2px; }
+        .carb-header { background: #141414; padding: 20px 50px; display: flex; align-items: center; gap: 20px; border-bottom: 3px solid #c9a227; }
+        .carb-body { padding: 22px 50px; display: flex; flex-direction: column; justify-content: center; background: #f8f8f8; }
+        .carb-footer { background: #141414; padding: 14px 50px; display: flex; justify-content: space-between; align-items: center; border-top: 3px solid #c9a227; }
+        .carb-title { font-family: 'Cinzel', serif; font-size: 23px; font-weight: 700; color: #fff; letter-spacing: 0.04em; }
+        .carb-subtitle { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: #94a3b8; margin-top: 2px; }
+        .carb-cert-type { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: #c9a227; margin-top: 3px; }
+        .carb-ref { font-size: 9px; color: #6b7280; text-align: right; }
+        .carb-certifies { font-family: 'EB Garamond', serif; font-size: 15px; color: #475569; font-style: italic; margin-bottom: 8px; }
+        .carb-orgname { font-family: 'Cinzel', serif; font-size: 21px; color: #1f2937; font-weight: 700; margin-bottom: 2px; }
+        .carb-address { font-size: 12px; color: #6b7280; margin-bottom: 8px; }
+        .carb-issuedto { font-size: 12px; color: #1f2937; padding: 5px 12px; background: #fff; border-left: 3px solid #c9a227; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        .carb-issuedto strong { color: #0f172a; font-weight: 700; }
+        .carb-rule { border: none; border-top: 1px solid #d1d5db; margin: 10px 0; }
+        .carb-scope-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #9ca3af; margin-bottom: 4px; }
+        .carb-scope { font-size: 14px; color: #374151; line-height: 1.65; border-left: 2px solid #d1d5db; padding-left: 12px; }
+        .carb-expiry { font-size: 12px; color: #6b7280; margin-top: 10px; font-weight: 500; }
+        .carb-expiry span { color: #1f2937; font-weight: 700; }
+        .carb-sig-name { font-family: 'Alex Brush', cursive; font-size: 32px; color: #c9a227; line-height: 1; }
+        .carb-sig-line { height: 1px; width: 150px; background: #374151; margin: 4px 0; }
+        .carb-sig-title { font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #6b7280; }
+        .carb-addressed { font-size: 8px; color: #4b5563; margin-top: 2px; text-align: right; }
 
-        /* ─── FORMAL MEMO ─── */
-        /* Pure white, single top rule, two-column footer — nearly zero ink */
+        /* ─── BLUEPRINT (memo) — Teal aviation technical ─── */
         #container-memo {
             height: 100%; display: grid;
-            grid-template-rows: auto auto 1fr auto;
+            grid-template-rows: auto 1fr auto;
             background: #fff; box-sizing: border-box;
+            border-top: 5px solid #0e7490;
+            position: relative;
         }
-        .memo-topbar { height: 6px; background: #006e96; }
-        .memo-header { padding: 20px 50px 14px; display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid #d1d5db; }
-        .memo-body   { padding: 22px 50px; display: flex; flex-direction: column; justify-content: center; }
-        .memo-footer { padding: 14px 50px 22px; border-top: 1px solid #d1d5db; display: flex; justify-content: space-between; align-items: flex-end; }
-        .memo-pcaa   { font-size: 8.5px; letter-spacing: 0.25em; text-transform: uppercase; color: #6b7280; }
-        .memo-title  { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700; color: #111827; }
-        .memo-subtitle { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #006e96; margin-top: 1px; }
-        .memo-ref    { font-size: 9px; color: #6b7280; text-align: right; }
-        .memo-certifies { font-size: 14px; color: #374151; margin-bottom: 8px; }
-        .memo-orgname { font-size: 20px; font-weight: 800; color: #111827; margin-bottom: 2px; }
-        .memo-address { font-size: 12px; color: #6b7280; margin-bottom: 6px; }
-        .memo-issuedto { font-size: 12px; color: #374151; margin-bottom: 10px; padding: 5px 10px 5px 11px; background: #f9fafb; border-left: 3px solid #006e96; }
-        .memo-issuedto strong { color: #006e96; font-weight: 700; }
-        .memo-scope-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #6b7280; margin-bottom: 3px; border-left: 3px solid #006e96; padding-left: 8px; }
-        .memo-scope  { font-size: 14px; color: #374151; line-height: 1.7; padding-left: 11px; }
-        .memo-expiry { font-size: 12px; color: #6b7280; margin-top: 12px; font-weight: 500; }
-        .memo-expiry span { color: #111827; font-weight: 700; }
-        .memo-sig-name  { font-family: 'Alex Brush', cursive; font-size: 28px; color: #111827; line-height: 1; }
-        .memo-sig-line  { height: 1px; width: 130px; background: #9ca3af; margin: 4px 0; }
-        .memo-sig-title { font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #374151; }
-        .memo-addressed { font-size: 8.5px; color: #9ca3af; margin-top: 2px; }
+        .bp-leftbar { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #0e7490; }
+        .bp-header { padding: 18px 50px 14px 50px; display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid #e0f2f1; }
+        .bp-body { padding: 20px 50px; display: flex; flex-direction: column; justify-content: center; }
+        .bp-footer { padding: 14px 50px 18px; border-top: 1px solid #e0f2f1; background: #f0fdfc; display: flex; justify-content: space-between; align-items: flex-end; }
+        .bp-corner { position: absolute; width: 18px; height: 18px; border-color: #0e7490; border-style: solid; opacity: 0.45; }
+        .bp-corner-tr { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
+        .bp-corner-br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+        .bp-agency { font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase; color: #0e7490; margin-bottom: 3px; }
+        .bp-title { font-family: 'Cinzel', serif; font-size: 21px; font-weight: 700; color: #1e293b; }
+        .bp-subtitle { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #0e7490; margin-top: 2px; }
+        .bp-ref { font-size: 9px; color: #94a3b8; text-align: right; }
+        .bp-certifies { font-size: 14px; color: #475569; margin-bottom: 8px; }
+        .bp-orgname { font-size: 22px; font-weight: 800; color: #1e293b; margin-bottom: 2px; }
+        .bp-address { font-size: 12px; color: #64748b; margin-bottom: 8px; }
+        .bp-issuedto { font-size: 12px; color: #1e293b; padding: 5px 10px; background: #f0fdfc; border-left: 3px solid #0e7490; margin-bottom: 10px; }
+        .bp-issuedto strong { color: #0e7490; font-weight: 700; }
+        .bp-scope-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #0e7490; margin-bottom: 4px; padding-left: 8px; border-left: 3px solid #0e7490; }
+        .bp-scope { font-size: 14px; color: #374151; line-height: 1.7; }
+        .bp-expiry { font-size: 12px; color: #64748b; margin-top: 10px; font-weight: 500; }
+        .bp-expiry span { color: #0e7490; font-weight: 700; }
+        .bp-sig-name { font-family: 'Alex Brush', cursive; font-size: 30px; color: #1e293b; line-height: 1; }
+        .bp-sig-line { height: 1px; width: 140px; background: #94a3b8; margin: 4px 0; }
+        .bp-sig-title { font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #64748b; }
+        .bp-addressed { font-size: 8px; color: #94a3b8; margin-top: 2px; }
 
-        /* ─── BORDERED LETTERHEAD ─── */
-        /* White background, decorative thin-rule frame only — very light ink */
+        /* ─── CRIMSON (letterhead) — Deep red formal ─── */
         #container-letterhead {
             height: 100%; display: grid;
             grid-template-rows: auto 1fr auto;
-            background: #fff; box-sizing: border-box;
-            padding: 16px; position: relative;
+            background: #fffdf5; box-sizing: border-box;
         }
-        .lh-frame {
-            position: absolute; inset: 16px;
-            border: 1px solid #1e293b; pointer-events: none;
-        }
-        .lh-frame::before {
-            content: ''; position: absolute; inset: 5px;
-            border: 1px solid #1e293b; opacity: 0.25;
-        }
-        /* corner ornaments */
-        .lh-corner { position: absolute; width: 18px; height: 18px; border-color: #1e293b; border-style: solid; }
-        .lh-corner-tl { top: -1px; left: -1px;   border-width: 3px 0 0 3px; }
-        .lh-corner-tr { top: -1px; right: -1px;   border-width: 3px 3px 0 0; }
-        .lh-corner-bl { bottom: -1px; left: -1px; border-width: 0 0 3px 3px; }
-        .lh-corner-br { bottom: -1px; right: -1px;border-width: 0 3px 3px 0; }
-        .lh-header { padding: 26px 48px 14px; display: flex; align-items: center; gap: 18px; border-bottom: 1px solid #e5e7eb; }
-        .lh-body   { padding: 18px 48px; display: flex; flex-direction: column; justify-content: center; }
-        .lh-footer { padding: 12px 48px 24px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: flex-end; }
-        .lh-title  { font-family: 'Cinzel', serif; font-size: 21px; font-weight: 700; color: #1e293b; }
-        .lh-subtitle { font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #64748b; }
-        .lh-ref    { font-size: 8.5px; color: #94a3b8; text-align: right; }
-        .lh-certifies { font-size: 14px; color: #475569; font-style: italic; margin-bottom: 7px; }
-        .lh-orgname { font-family: 'Cinzel', serif; font-size: 19px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
-        .lh-address { font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
-        .lh-issuedto { font-size: 12px; color: #334155; margin-bottom: 10px; padding: 5px 10px; background: #f8fafc; border-left: 2px solid #1e293b; }
-        .lh-issuedto strong { font-weight: 700; color: #1e293b; }
-        .lh-scope-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #64748b; margin-bottom: 3px; }
-        .lh-divider { border: none; border-top: 1px dashed #cbd5e1; margin: 0 0 10px; }
-        .lh-scope  { font-size: 14px; color: #334155; line-height: 1.7; }
-        .lh-expiry { font-size: 12px; color: #94a3b8; margin-top: 10px; font-weight: 500; }
-        .lh-expiry span { color: #1e293b; font-weight: 700; }
-        .lh-sig-name  { font-family: 'Alex Brush', cursive; font-size: 28px; color: #1e293b; line-height: 1; }
-        .lh-sig-line  { height: 1px; width: 130px; background: #cbd5e1; margin: 4px 0; }
-        .lh-sig-title { font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #475569; }
-        .lh-addressed { font-size: 8.5px; color: #b0bec5; margin-top: 2px; }
+        .crim-header { background: #7b1a1a; padding: 18px 50px; display: flex; align-items: center; gap: 20px; border-bottom: 3px solid #d4a017; }
+        .crim-body { padding: 22px 50px; display: flex; flex-direction: column; justify-content: center; background: #fffdf5; }
+        .crim-footer { background: #7b1a1a; padding: 14px 50px; display: flex; justify-content: space-between; align-items: center; border-top: 3px solid #d4a017; }
+        .crim-pcaa { font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+        .crim-title { font-family: 'Cinzel', serif; font-size: 23px; font-weight: 700; color: #fff; }
+        .crim-subtitle { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: #d4a017; margin-top: 3px; }
+        .crim-certifies { font-family: 'EB Garamond', serif; font-size: 15px; color: #4b5563; font-style: italic; margin-bottom: 8px; }
+        .crim-orgname { font-family: 'Cinzel', serif; font-size: 21px; color: #7b1a1a; font-weight: 700; margin-bottom: 2px; }
+        .crim-address { font-size: 12px; color: #6b7280; margin-bottom: 8px; }
+        .crim-issuedto { font-size: 12px; color: #1f2937; padding: 5px 12px; background: #fff8f0; border-left: 3px solid #d4a017; margin-bottom: 10px; }
+        .crim-issuedto strong { color: #7b1a1a; font-weight: 700; }
+        .crim-rule { border: none; border-top: 1px solid #f3e8c8; margin: 10px 0; }
+        .crim-scope-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #9ca3af; margin-bottom: 4px; }
+        .crim-scope { font-family: 'EB Garamond', serif; font-size: 15px; color: #1f2937; line-height: 1.65; }
+        .crim-expiry { font-size: 12px; color: #6b7280; margin-top: 10px; font-weight: 500; }
+        .crim-expiry span { color: #7b1a1a; font-weight: 700; }
+        .crim-sig-name { font-family: 'Alex Brush', cursive; font-size: 32px; color: #d4a017; line-height: 1; }
+        .crim-sig-line { height: 1px; width: 150px; background: rgba(212,160,23,0.4); margin: 4px 0; }
+        .crim-sig-title { font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+        .crim-ref { font-size: 9px; color: rgba(255,255,255,0.5); text-align: right; }
+        .crim-addressed { font-size: 8px; color: rgba(255,255,255,0.3); margin-top: 3px; text-align: right; }
 
-        /* ─── RIBBON ─── */
-        /* White body with a single thin colour ribbon header + footer strip — minimal ink */
+        /* ─── IVORY SEAL (ribbon) — Warm parchment heritage ─── */
         #container-ribbon {
             height: 100%; display: grid;
             grid-template-rows: auto 1fr auto;
-            background: #fff; box-sizing: border-box;
+            background: #f5f0e5; box-sizing: border-box;
+            border: 2px solid #4a3728;
         }
-        .ribbon-header { background: #006e96; padding: 18px 46px; display: flex; align-items: center; justify-content: space-between; }
-        .ribbon-body   { padding: 24px 46px; display: flex; flex-direction: column; justify-content: center; }
-        .ribbon-footer { background: #f8fafc; border-top: 3px solid #006e96; padding: 14px 46px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .ribbon-title  { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700; color: #fff; }
-        .ribbon-subtitle { font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-top: 1px; }
-        .ribbon-ref    { font-size: 9px; color: rgba(255,255,255,0.65); text-align: right; }
-        .ribbon-certifies { font-size: 14px; color: #475569; margin-bottom: 8px; }
-        .ribbon-orgname { font-size: 22px; font-weight: 800; color: #006e96; margin-bottom: 2px; }
-        .ribbon-address { font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
-        .ribbon-issuedto { font-size: 12px; color: #374151; margin-bottom: 10px; padding: 5px 10px; background: #f0f8fc; border-left: 3px solid #006e96; border-radius: 0 4px 4px 0; }
-        .ribbon-issuedto strong { color: #006e96; font-weight: 700; }
-        .ribbon-scope-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #006e96; margin-bottom: 4px; }
-        .ribbon-scope  { font-size: 14px; color: #374151; line-height: 1.7; }
-        .ribbon-expiry { font-size: 12px; color: #94a3b8; margin-top: 11px; font-weight: 500; }
-        .ribbon-expiry span { color: #006e96; font-weight: 700; }
-        .ribbon-sig-name  { font-family: 'Alex Brush', cursive; font-size: 28px; color: #1e293b; line-height: 1; }
-        .ribbon-sig-line  { height: 1px; width: 130px; background: #cbd5e1; margin: 4px 0; }
-        .ribbon-sig-title { font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #374151; }
-        .ribbon-addressed { font-size: 8.5px; color: #b0bec5; margin-top: 2px; }
+        .ivory-header { background: #ede5d3; padding: 20px 50px; display: flex; align-items: center; gap: 20px; border-bottom: 2px solid #4a3728; }
+        .ivory-body { padding: 22px 50px; display: flex; flex-direction: column; justify-content: center; }
+        .ivory-footer { background: #ede5d3; padding: 14px 50px; display: flex; justify-content: space-between; align-items: flex-end; border-top: 2px solid #4a3728; }
+        .ivory-pcaa { font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase; color: #7a6450; margin-bottom: 4px; }
+        .ivory-title { font-family: 'Cinzel', serif; font-size: 23px; font-weight: 700; color: #2d1a00; }
+        .ivory-subtitle { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: #7a6450; margin-top: 3px; }
+        .ivory-ref { font-size: 9px; color: #9c836d; text-align: right; }
+        .ivory-certifies { font-family: 'EB Garamond', serif; font-size: 15px; color: #5c4a3a; font-style: italic; margin-bottom: 8px; }
+        .ivory-orgname { font-family: 'Cinzel', serif; font-size: 21px; color: #2d1a00; font-weight: 700; margin-bottom: 2px; }
+        .ivory-address { font-size: 12px; color: #7a6450; margin-bottom: 8px; }
+        .ivory-issuedto { font-size: 12px; color: #2d1a00; padding: 5px 10px; background: #ede5d3; border-left: 3px solid #7a6450; margin-bottom: 10px; }
+        .ivory-issuedto strong { color: #4a3728; font-weight: 700; }
+        .ivory-rule { border: none; border-top: 1px solid #c8b49a; margin: 10px 0; }
+        .ivory-scope-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #9c836d; margin-bottom: 4px; }
+        .ivory-scope { font-family: 'EB Garamond', serif; font-size: 15px; color: #3d2b1a; line-height: 1.65; }
+        .ivory-expiry { font-size: 12px; color: #7a6450; margin-top: 10px; font-weight: 500; }
+        .ivory-expiry span { color: #2d1a00; font-weight: 700; }
+        .ivory-sig-name { font-family: 'Alex Brush', cursive; font-size: 30px; color: #4a3728; line-height: 1; }
+        .ivory-sig-line { height: 1px; width: 140px; background: #9c836d; margin: 4px 0; }
+        .ivory-sig-title { font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #7a6450; }
+        .ivory-addressed { font-size: 8px; color: #9c836d; margin-top: 2px; }
 
         /* logo common */
         .cert-logo { height: 52px; width: auto; object-fit: contain; }
@@ -372,22 +350,22 @@
                 <div class="section-title"><span class="num">1</span> Design Layout</div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                     <button onclick="changeDesignStyle('classic')" id="btn-classic" class="layout-btn active">
-                        <i class="fa-solid fa-scroll"></i> Traditional
+                        <i class="fa-solid fa-shield-halved"></i> Sovereign
                     </button>
                     <button onclick="changeDesignStyle('minimal')" id="btn-minimal" class="layout-btn">
-                        <i class="fa-solid fa-minus"></i> Minimalist
+                        <i class="fa-solid fa-leaf"></i> Emerald
                     </button>
                     <button onclick="changeDesignStyle('executive')" id="btn-executive" class="layout-btn">
-                        <i class="fa-solid fa-star"></i> Executive
+                        <i class="fa-solid fa-gem"></i> Carbon
                     </button>
-                    <button onclick="changeDesignStyle('memo')" id="btn-memo" class="layout-btn printer-tag">
-                        <i class="fa-solid fa-file-lines"></i> Formal Memo
+                    <button onclick="changeDesignStyle('memo')" id="btn-memo" class="layout-btn">
+                        <i class="fa-solid fa-drafting-compass"></i> Blueprint
                     </button>
-                    <button onclick="changeDesignStyle('letterhead')" id="btn-letterhead" class="layout-btn printer-tag">
-                        <i class="fa-solid fa-border-all"></i> Letterhead
+                    <button onclick="changeDesignStyle('letterhead')" id="btn-letterhead" class="layout-btn">
+                        <i class="fa-solid fa-fire"></i> Crimson
                     </button>
-                    <button onclick="changeDesignStyle('ribbon')" id="btn-ribbon" class="layout-btn printer-tag">
-                        <i class="fa-solid fa-ribbon"></i> Ribbon
+                    <button onclick="changeDesignStyle('ribbon')" id="btn-ribbon" class="layout-btn">
+                        <i class="fa-solid fa-scroll"></i> Ivory Seal
                     </button>
                 </div>
             </div>
@@ -503,211 +481,213 @@
             <div class="preview-outer-container" id="scale-outer">
                 <div class="cert-canvas-wrapper" id="certificate-target">
 
-                    <!-- ── TRADITIONAL ── -->
+                    <!-- ── SOVEREIGN ── -->
                     <div id="container-classic">
-                        <div class="classic-header">
-                            <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'">
+                        <div class="sov-header">
+                            <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'" style="filter:brightness(0) invert(1);opacity:0.9;">
                             <div class="flex-grow text-center">
-                                <div class="text-[9px] tracking-[0.3em] text-slate-400 uppercase mb-1">Pakistan Civil Aviation Authority</div>
-                                <div class="classic-title">Certificate of Approval</div>
-                                <div class="classic-subtitle" id="view-classic-cert-type">Approved Training Organisation</div>
+                                <div class="sov-pcaa">Pakistan Civil Aviation Authority · Aviation Security Directorate</div>
+                                <div class="sov-title">Certificate of Approval</div>
+                                <div class="sov-subtitle" id="view-classic-cert-type">Approved Training Organisation</div>
                             </div>
-                            <div class="classic-seal"><i class="fa-solid fa-stamp"></i></div>
+                            <div style="width:52px;"></div>
                         </div>
-                        <div class="classic-body">
-                            <div class="classic-certifies">This is to certify that the following entity has been assessed and found to comply with all applicable requirements of the National Aviation Security Programme (NASP):</div>
-                            <div class="classic-orgname" id="view-classic-org">Organisation Name</div>
-                            <div class="classic-address" id="view-classic-address">—</div>
-                            <div class="classic-issuedto" id="view-classic-body-issuedto" style="display:none;"></div>
-                            <div class="classic-scope-label">Scope of Certification</div>
-                            <div class="classic-scope" id="view-classic-scope">—</div>
-                            <div class="classic-expiry" id="view-classic-expiry">Valid from <span id="view-classic-issue">—</span> — Expires: <span id="view-classic-exp">—</span></div>
+                        <div class="sov-body">
+                            <div class="sov-certifies">This is to certify that the following entity has been assessed and found to comply with all applicable requirements of the National Aviation Security Programme (NASP):</div>
+                            <div class="sov-orgname" id="view-classic-org">Organisation Name</div>
+                            <div class="sov-address" id="view-classic-address">—</div>
+                            <div class="sov-issuedto" id="view-classic-body-issuedto" style="display:none;"></div>
+                            <hr class="sov-rule">
+                            <div class="sov-scope-label">Scope of Certification</div>
+                            <div class="sov-scope" id="view-classic-scope">—</div>
+                            <div class="sov-expiry">Valid from <span id="view-classic-issue">—</span> &nbsp;·&nbsp; Expires: <span id="view-classic-exp">—</span></div>
                         </div>
-                        <div class="classic-footer">
+                        <div class="sov-footer">
                             <div>
-                                <div class="classic-sig-name" id="view-classic-sig-name">Director General Security</div>
-                                <div style="height:1px; width:140px; background:#ccc; margin:4px 0;"></div>
-                                <div class="classic-sig-title" id="view-classic-sig-title">Director Security, PCAA</div>
-                                <div class="classic-addressed" id="view-classic-addressed"></div>
+                                <div class="sov-sig-name" id="view-classic-sig-name">Director General Security</div>
+                                <div class="sov-sig-line"></div>
+                                <div class="sov-sig-title" id="view-classic-sig-title">Director Security, PCAA</div>
                             </div>
                             <div class="text-right">
-                                <div class="classic-ref" id="view-classic-ref">Ref: —</div>
-                                <canvas id="view-classic-qr" width="60" height="60" class="mt-2 ml-auto"></canvas>
+                                <div class="sov-ref" id="view-classic-ref">—</div>
+                                <div class="sov-addressed" id="view-classic-addressed"></div>
+                                <canvas id="view-classic-qr" width="60" height="60" class="mt-2 ml-auto" style="opacity:0.75;"></canvas>
                             </div>
                         </div>
                     </div>
 
-                    <!-- ── MINIMALIST ── -->
-                    <div id="container-minimal" class="hidden">
-                        <div class="minimal-header">
-                            <img src="Untitled-removebg-preview.png" class="cert-logo-sm" onerror="this.style.display='none'">
-                            <div class="text-right">
-                                <div class="minimal-title">Certificate of Approval</div>
-                                <div class="minimal-subtitle" id="view-minimal-cert-type">Approved Training Organisation</div>
+                    <!-- ── EMERALD ── -->
+                    <div id="container-minimal">
+                        <div class="em-header">
+                            <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'">
+                            <div style="padding-left:16px;">
+                                <div class="em-tag">Pakistan Civil Aviation Authority</div>
+                                <div class="em-title">Certificate of Approval</div>
+                                <div class="em-subtitle" id="view-minimal-cert-type">Approved Training Organisation</div>
                             </div>
+                            <div class="em-ref" style="margin-left:auto;" id="view-minimal-ref">Reference: —</div>
                         </div>
-                        <div class="minimal-body">
-                            <div class="minimal-ref mb-4" id="view-minimal-ref">Reference: —</div>
-                            <div class="minimal-certifies">This is to certify that</div>
-                            <div class="minimal-orgname" id="view-minimal-org">Organisation Name</div>
-                            <div class="minimal-address" id="view-minimal-address">—</div>
-                            <div class="minimal-issuedto" id="view-minimal-body-issuedto" style="display:none;"></div>
-                            <hr class="minimal-divider">
-                            <div class="minimal-scope-label">Scope</div>
-                            <div class="minimal-scope" id="view-minimal-scope">—</div>
-                            <div class="minimal-expiry" id="view-minimal-expiry">Issued: <span id="view-minimal-issue">—</span> &nbsp;|&nbsp; Expires: <span id="view-minimal-exp">—</span></div>
+                        <div class="em-body">
+                            <div class="em-certifies">This is to certify that the following entity has been assessed and found to comply with all applicable requirements of the National Aviation Security Programme:</div>
+                            <div class="em-orgname" id="view-minimal-org">Organisation Name</div>
+                            <div class="em-address" id="view-minimal-address">—</div>
+                            <div class="em-issuedto" id="view-minimal-body-issuedto" style="display:none;"></div>
+                            <hr class="em-divider">
+                            <div class="em-scope-label">Scope of Certification</div>
+                            <div class="em-scope" id="view-minimal-scope">—</div>
+                            <div class="em-expiry">Issued: <span id="view-minimal-issue">—</span> &nbsp;|&nbsp; Expires: <span id="view-minimal-exp">—</span></div>
                         </div>
-                        <div class="minimal-footer">
+                        <div class="em-footer">
                             <div>
-                                <div class="minimal-sig-name" id="view-minimal-sig-name">Director General Security</div>
-                                <div class="minimal-sig-title" id="view-minimal-sig-title">Director Security, PCAA</div>
-                                <div class="minimal-addressed" id="view-minimal-addressed"></div>
+                                <div class="em-sig-name" id="view-minimal-sig-name">Director General Security</div>
+                                <div class="em-sig-line"></div>
+                                <div class="em-sig-title" id="view-minimal-sig-title">Director Security, PCAA</div>
+                                <div class="em-addressed" id="view-minimal-addressed"></div>
                             </div>
                             <canvas id="view-minimal-qr" width="55" height="55"></canvas>
                         </div>
                     </div>
 
-                    <!-- ── EXECUTIVE ── -->
-                    <div id="container-executive" class="hidden">
-                        <div class="exec-corner exec-corner-tl"></div>
-                        <div class="exec-corner exec-corner-tr"></div>
-                        <div class="exec-corner exec-corner-bl"></div>
-                        <div class="exec-corner exec-corner-br"></div>
-                        <div class="exec-header">
-                            <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'" style="filter: brightness(0) invert(1); opacity:0.9;">
-                            <div class="text-right">
-                                <div class="exec-title">Certificate of Approval</div>
-                                <div class="exec-subtitle" id="view-executive-cert-type">Approved Training Organisation</div>
-                                <div class="exec-ref mt-1" id="view-exec-ref">—</div>
+                    <!-- ── CARBON ── -->
+                    <div id="container-executive">
+                        <div class="carb-header">
+                            <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'" style="filter:brightness(0) invert(1);opacity:0.85;">
+                            <div class="flex-grow text-center">
+                                <div class="carb-title">Certificate of Approval</div>
+                                <div class="carb-subtitle">Pakistan Civil Aviation Authority</div>
+                                <div class="carb-cert-type" id="view-executive-cert-type">Approved Training Organisation</div>
                             </div>
+                            <div class="carb-ref" id="view-exec-ref">—</div>
                         </div>
-                        <div class="exec-body">
-                            <div class="exec-certifies">This is to certify that</div>
-                            <div class="exec-orgname" id="view-executive-org">Organisation Name</div>
-                            <div class="exec-address" id="view-exec-address">—</div>
-                            <div class="exec-issuedto" id="view-exec-body-issuedto" style="display:none;"></div>
-                            <div class="exec-scope-label">Scope of Certification</div>
-                            <div class="exec-scope" id="view-executive-scope">—</div>
-                            <div class="exec-expiry" id="view-exec-expiry">Valid from <span id="view-exec-issue">—</span> to <span id="view-exec-exp">—</span></div>
+                        <div class="carb-body">
+                            <div class="carb-certifies">This is to certify that the following entity has been assessed and found to comply with all applicable requirements of the National Aviation Security Programme (NASP):</div>
+                            <div class="carb-orgname" id="view-executive-org">Organisation Name</div>
+                            <div class="carb-address" id="view-exec-address">—</div>
+                            <div class="carb-issuedto" id="view-exec-body-issuedto" style="display:none;"></div>
+                            <hr class="carb-rule">
+                            <div class="carb-scope-label">Scope of Certification</div>
+                            <div class="carb-scope" id="view-executive-scope">—</div>
+                            <div class="carb-expiry">Valid from <span id="view-exec-issue">—</span> to <span id="view-exec-exp">—</span></div>
                         </div>
-                        <div class="exec-footer">
+                        <div class="carb-footer">
                             <div>
-                                <div class="exec-sig-name" id="view-exec-sig-name">Director General Security</div>
-                                <div style="height:1px; width:150px; background:rgba(180,150,5,0.4); margin: 4px 0;"></div>
-                                <div class="exec-sig-title" id="view-exec-sig-title">Director Security, PCAA</div>
-                                <div class="exec-addressed" id="view-exec-addressed"></div>
+                                <div class="carb-sig-name" id="view-exec-sig-name">Director General Security</div>
+                                <div class="carb-sig-line"></div>
+                                <div class="carb-sig-title" id="view-exec-sig-title">Director Security, PCAA</div>
                             </div>
-                            <canvas id="view-executive-qr" width="65" height="65"></canvas>
+                            <div class="text-right">
+                                <div class="carb-addressed" id="view-exec-addressed"></div>
+                                <canvas id="view-executive-qr" width="62" height="62" style="opacity:0.8;margin-top:4px;"></canvas>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- ── FORMAL MEMO ── -->
-                    <div id="container-memo" class="hidden">
-                        <div class="memo-topbar"></div>
-                        <div class="memo-header">
+                    <!-- ── BLUEPRINT ── -->
+                    <div id="container-memo">
+                        <div class="bp-leftbar"></div>
+                        <div class="bp-corner bp-corner-tr"></div>
+                        <div class="bp-corner bp-corner-br"></div>
+                        <div class="bp-header">
                             <div class="flex items-center gap-4">
                                 <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'">
                                 <div>
-                                    <div class="memo-pcaa">Pakistan Civil Aviation Authority — Aviation Security</div>
-                                    <div class="memo-title">Certificate of Approval</div>
-                                    <div class="memo-subtitle" id="view-memo-cert-type">Approved Training Organisation</div>
+                                    <div class="bp-agency">Pakistan Civil Aviation Authority — Aviation Security</div>
+                                    <div class="bp-title">Certificate of Approval</div>
+                                    <div class="bp-subtitle" id="view-memo-cert-type">Approved Training Organisation</div>
                                 </div>
                             </div>
-                            <div class="memo-ref">
+                            <div class="bp-ref">
                                 <div id="view-memo-ref">—</div>
                                 <div id="view-memo-addressed" style="font-size:8px;color:#b0bec5;margin-top:3px;"></div>
                             </div>
                         </div>
-                        <div class="memo-body">
-                            <div class="memo-certifies">This is to certify that the following entity has been duly assessed and found to comply with all applicable requirements of the National Aviation Security Programme (NASP):</div>
-                            <div class="memo-orgname" id="view-memo-org">Organisation Name</div>
-                            <div class="memo-address" id="view-memo-address">—</div>
-                            <div class="memo-issuedto" id="view-memo-body-issuedto" style="display:none;"></div>
-                            <div class="memo-scope-label">Scope of Certification</div>
-                            <div class="memo-scope" id="view-memo-scope">—</div>
-                            <div class="memo-expiry">Valid from <span id="view-memo-issue">—</span> &nbsp;·&nbsp; Expires: <span id="view-memo-exp">—</span></div>
+                        <div class="bp-body">
+                            <div class="bp-certifies">This is to certify that the following entity has been assessed and found to comply with all applicable requirements of the National Aviation Security Programme (NASP):</div>
+                            <div class="bp-orgname" id="view-memo-org">Organisation Name</div>
+                            <div class="bp-address" id="view-memo-address">—</div>
+                            <div class="bp-issuedto" id="view-memo-body-issuedto" style="display:none;"></div>
+                            <div class="bp-scope-label">Scope of Certification</div>
+                            <div class="bp-scope" id="view-memo-scope">—</div>
+                            <div class="bp-expiry">Valid from <span id="view-memo-issue">—</span> &nbsp;·&nbsp; Expires: <span id="view-memo-exp">—</span></div>
                         </div>
-                        <div class="memo-footer">
+                        <div class="bp-footer">
                             <div>
-                                <div class="memo-sig-name" id="view-memo-sig-name">Director General Security</div>
-                                <div class="memo-sig-line"></div>
-                                <div class="memo-sig-title" id="view-memo-sig-title">Director Security, PCAA</div>
-                                <div class="memo-addressed" id="view-memo-issuedto"></div>
+                                <div class="bp-sig-name" id="view-memo-sig-name">Director General Security</div>
+                                <div class="bp-sig-line"></div>
+                                <div class="bp-sig-title" id="view-memo-sig-title">Director Security, PCAA</div>
+                                <div class="bp-addressed" id="view-memo-issuedto"></div>
                             </div>
                             <canvas id="view-memo-qr" width="58" height="58"></canvas>
                         </div>
                     </div>
 
-                    <!-- ── BORDERED LETTERHEAD ── -->
-                    <div id="container-letterhead" class="hidden">
-                        <div class="lh-frame">
-                            <div class="lh-corner lh-corner-tl"></div>
-                            <div class="lh-corner lh-corner-tr"></div>
-                            <div class="lh-corner lh-corner-bl"></div>
-                            <div class="lh-corner lh-corner-br"></div>
-                        </div>
-                        <div class="lh-header">
-                            <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'">
+                    <!-- ── CRIMSON ── -->
+                    <div id="container-letterhead">
+                        <div class="crim-header">
+                            <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'" style="filter:brightness(0) invert(1);opacity:0.9;">
                             <div class="flex-grow text-center">
-                                <div style="font-size:8px;letter-spacing:0.3em;text-transform:uppercase;color:#94a3b8;margin-bottom:3px;">Pakistan Civil Aviation Authority</div>
-                                <div class="lh-title">Certificate of Approval</div>
-                                <div class="lh-subtitle" id="view-lh-cert-type">Approved Training Organisation</div>
+                                <div class="crim-pcaa">Pakistan Civil Aviation Authority · Aviation Security Directorate</div>
+                                <div class="crim-title">Certificate of Approval</div>
+                                <div class="crim-subtitle" id="view-lh-cert-type">Approved Training Organisation</div>
                             </div>
-                            <div class="lh-ref" id="view-lh-ref">—</div>
+                            <div style="width:52px;"></div>
                         </div>
-                        <div class="lh-body">
-                            <div class="lh-certifies">This is to certify that the following entity has been assessed and found to comply with all applicable requirements of the National Aviation Security Programme (NASP):</div>
-                            <div class="lh-orgname" id="view-lh-org">Organisation Name</div>
-                            <div class="lh-address" id="view-lh-address">—</div>
-                            <div class="lh-issuedto" id="view-lh-body-issuedto" style="display:none;"></div>
-                            <div class="lh-scope-label">Scope of Certification</div>
-                            <hr class="lh-divider">
-                            <div class="lh-scope" id="view-lh-scope">—</div>
-                            <div class="lh-expiry">Valid from <span id="view-lh-issue">—</span> &nbsp;·&nbsp; Expires: <span id="view-lh-exp">—</span></div>
+                        <div class="crim-body">
+                            <div class="crim-certifies">This is to certify that the following entity has been assessed and found to comply with all applicable requirements of the National Aviation Security Programme (NASP):</div>
+                            <div class="crim-orgname" id="view-lh-org">Organisation Name</div>
+                            <div class="crim-address" id="view-lh-address">—</div>
+                            <div class="crim-issuedto" id="view-lh-body-issuedto" style="display:none;"></div>
+                            <hr class="crim-rule">
+                            <div class="crim-scope-label">Scope of Certification</div>
+                            <div class="crim-scope" id="view-lh-scope">—</div>
+                            <div class="crim-expiry">Valid from <span id="view-lh-issue">—</span> &nbsp;·&nbsp; Expires: <span id="view-lh-exp">—</span></div>
                         </div>
-                        <div class="lh-footer">
+                        <div class="crim-footer">
                             <div>
-                                <div class="lh-sig-name" id="view-lh-sig-name">Director General Security</div>
-                                <div class="lh-sig-line"></div>
-                                <div class="lh-sig-title" id="view-lh-sig-title">Director Security, PCAA</div>
-                                <div class="lh-addressed" id="view-lh-addressed"></div>
+                                <div class="crim-sig-name" id="view-lh-sig-name">Director General Security</div>
+                                <div class="crim-sig-line"></div>
+                                <div class="crim-sig-title" id="view-lh-sig-title">Director Security, PCAA</div>
                             </div>
-                            <canvas id="view-lh-qr" width="55" height="55"></canvas>
+                            <div class="text-right">
+                                <div class="crim-ref" id="view-lh-ref">—</div>
+                                <div class="crim-addressed" id="view-lh-addressed"></div>
+                                <canvas id="view-lh-qr" width="55" height="55" class="mt-2 ml-auto" style="opacity:0.75;"></canvas>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- ── RIBBON ── -->
-                    <div id="container-ribbon" class="hidden">
-                        <div class="ribbon-header">
-                            <div class="flex items-center gap-4">
-                                <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'" style="filter:brightness(0) invert(1);opacity:0.92;">
-                                <div>
-                                    <div class="ribbon-title">Certificate of Approval</div>
-                                    <div class="ribbon-subtitle" id="view-ribbon-cert-type">Approved Training Organisation</div>
-                                </div>
+                    <!-- ── IVORY SEAL ── -->
+                    <div id="container-ribbon">
+                        <div class="ivory-header">
+                            <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'">
+                            <div class="flex-grow text-center">
+                                <div class="ivory-pcaa">Pakistan Civil Aviation Authority · Aviation Security Directorate</div>
+                                <div class="ivory-title">Certificate of Approval</div>
+                                <div class="ivory-subtitle" id="view-ribbon-cert-type">Approved Training Organisation</div>
                             </div>
-                            <div class="ribbon-ref">
-                                <div id="view-ribbon-ref">—</div>
-                                <div id="view-ribbon-addressed" style="font-size:8px;color:rgba(255,255,255,0.45);margin-top:3px;"></div>
-                            </div>
+                            <div class="ivory-ref" id="view-ribbon-ref">—</div>
                         </div>
-                        <div class="ribbon-body">
-                            <div class="ribbon-certifies">This is to certify that the following entity has been assessed and found to comply with all applicable requirements of the National Aviation Security Programme (NASP):</div>
-                            <div class="ribbon-orgname" id="view-ribbon-org">Organisation Name</div>
-                            <div class="ribbon-address" id="view-ribbon-address">—</div>
-                            <div class="ribbon-issuedto" id="view-ribbon-body-issuedto" style="display:none;"></div>
-                            <div class="ribbon-scope-label">Scope of Certification</div>
-                            <div class="ribbon-scope" id="view-ribbon-scope">—</div>
-                            <div class="ribbon-expiry">Valid from <span id="view-ribbon-issue">—</span> &nbsp;·&nbsp; Expires: <span id="view-ribbon-exp">—</span></div>
+                        <div class="ivory-body">
+                            <div class="ivory-certifies">This is to certify that the following entity has been assessed and found to comply with all applicable requirements of the National Aviation Security Programme (NASP):</div>
+                            <div class="ivory-orgname" id="view-ribbon-org">Organisation Name</div>
+                            <div class="ivory-address" id="view-ribbon-address">—</div>
+                            <div class="ivory-issuedto" id="view-ribbon-body-issuedto" style="display:none;"></div>
+                            <hr class="ivory-rule">
+                            <div class="ivory-scope-label">Scope of Certification</div>
+                            <div class="ivory-scope" id="view-ribbon-scope">—</div>
+                            <div class="ivory-expiry">Valid from <span id="view-ribbon-issue">—</span> &nbsp;·&nbsp; Expires: <span id="view-ribbon-exp">—</span></div>
                         </div>
-                        <div class="ribbon-footer">
+                        <div class="ivory-footer">
                             <div>
-                                <div class="ribbon-sig-name" id="view-ribbon-sig-name">Director General Security</div>
-                                <div class="ribbon-sig-line"></div>
-                                <div class="ribbon-sig-title" id="view-ribbon-sig-title">Director Security, PCAA</div>
-                                <div class="ribbon-addressed" id="view-ribbon-issuedto"></div>
+                                <div class="ivory-sig-name" id="view-ribbon-sig-name">Director General Security</div>
+                                <div class="ivory-sig-line"></div>
+                                <div class="ivory-sig-title" id="view-ribbon-sig-title">Director Security, PCAA</div>
+                                <div class="ivory-addressed" id="view-ribbon-addressed"></div>
                             </div>
-                            <canvas id="view-ribbon-qr" width="58" height="58"></canvas>
+                            <div class="text-right">
+                                <canvas id="view-ribbon-qr" width="58" height="58" style="opacity:0.7;"></canvas>
+                                <div id="view-ribbon-issuedto" style="font-size:8px;color:#9c836d;margin-top:4px;"></div>
+                            </div>
                         </div>
                     </div>
 
