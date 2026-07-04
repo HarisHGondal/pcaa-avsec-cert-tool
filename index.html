@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCAA AVSEC Certificate Issuance Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700;800&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #f1f5f9; color: #1e293b; overflow-x: hidden; }
+
+        .preview-outer-container { width: 100%; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; transition: height 0.2s ease; min-height: 300px; padding-top: 10px; }
+        .cert-canvas-wrapper { width: 950px; height: 671px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); border-radius: 4px; overflow: hidden; background-color: #ffffff; flex-shrink: 0; transform-origin: top center; transition: transform 0.1s ease; }
+
+        @media print {
+            .no-print, header, aside { display: none !important; }
+            .cert-canvas-wrapper { position: fixed !important; top: 0 !important; left: 0 !important; width: 297mm !important; height: 210mm !important; transform: none !important; border: none !important; box-shadow: none !important; }
+            @page { size: A4 landscape; margin: 0; }
+        }
+
+        /* ─── LAYOUT BUTTON ACTIVE STATE ─── */
+        .layout-btn { transition: all 0.15s; }
+        .layout-btn.active { background: #006e96; color: white; border-color: #006e96; }
+
+        /* ─── CLASSIC (TRADITIONAL) ─── */
+        #container-classic {
+            height: 100%; display: grid;
+            grid-template-rows: auto 1fr auto;
+            background: #fff; box-sizing: border-box;
+            border: 14px solid #006e96; position: relative;
+        }
+        #container-classic::before {
+            content: ''; position: absolute; inset: 5px;
+            border: 1px solid #b49605; pointer-events: none; z-index: 1;
+        }
+        .classic-header { padding: 22px 50px 14px; border-bottom: 2px solid #e8e0cc; display: flex; align-items: center; gap: 20px; }
+        .classic-body { padding: 20px 50px; display: flex; flex-direction: column; justify-content: center; }
+        .classic-footer { padding: 14px 50px 22px; border-top: 2px solid #e8e0cc; display: flex; justify-content: space-between; align-items: flex-end; }
+        .classic-ref { font-size: 9.5px; letter-spacing: 0.1em; color: #888; text-transform: uppercase; }
+        .classic-title { font-family: 'Cinzel', serif; font-size: 24px; font-weight: 700; color: #006e96; margin-bottom: 1px; }
+        .classic-subtitle { font-size: 11px; color: #b49605; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; }
+        .classic-certifies { font-family: 'EB Garamond', serif; font-size: 13px; color: #555; font-style: italic; margin-bottom: 6px; }
+        .classic-orgname { font-family: 'Cinzel', serif; font-size: 20px; color: #006e96; font-weight: 700; margin-bottom: 2px; }
+        .classic-address { font-size: 10px; color: #777; margin-bottom: 12px; }
+        .classic-scope-label { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #b49605; margin-bottom: 3px; }
+        .classic-scope { font-family: 'EB Garamond', serif; font-size: 13px; color: #444; line-height: 1.65; }
+        .classic-expiry { font-size: 9.5px; color: #555; margin-top: 10px; }
+        .classic-expiry span { color: #006e96; font-weight: 700; }
+        .classic-sig-label { font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #999; }
+        .classic-sig-name { font-family: 'Alex Brush', cursive; font-size: 30px; color: #006e96; line-height: 1.1; }
+        .classic-sig-title { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #444; }
+        .classic-addressed { font-size: 9px; color: #888; margin-top: 2px; }
+        .classic-seal { width: 70px; height: 70px; border-radius: 50%; border: 2px dashed #b49605; display: flex; align-items: center; justify-content: center; color: #b49605; font-size: 22px; opacity: 0.5; }
+
+        /* ─── MINIMAL ─── */
+        #container-minimal {
+            height: 100%; display: grid;
+            grid-template-rows: auto 1fr auto;
+            background: #fcfaf7; box-sizing: border-box;
+            border-top: 4px solid #1e293b; border-bottom: 4px solid #1e293b;
+        }
+        .minimal-header { padding: 26px 55px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; }
+        .minimal-body { padding: 22px 55px; display: flex; flex-direction: column; justify-content: center; }
+        .minimal-footer { padding: 16px 55px 26px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: flex-end; }
+        .minimal-ref { font-size: 9px; letter-spacing: 0.2em; color: #94a3b8; text-transform: uppercase; }
+        .minimal-title { font-size: 22px; font-weight: 300; letter-spacing: 0.22em; text-transform: uppercase; color: #1e293b; margin-bottom: 2px; }
+        .minimal-subtitle { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: #94a3b8; }
+        .minimal-certifies { font-size: 11px; color: #64748b; font-style: italic; margin-bottom: 8px; }
+        .minimal-orgname { font-size: 21px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+        .minimal-address { font-size: 9.5px; color: #94a3b8; margin-bottom: 14px; }
+        .minimal-divider { border: none; border-top: 1px solid #e2e8f0; margin: 0 0 12px; }
+        .minimal-scope-label { font-size: 8.5px; letter-spacing: 0.25em; text-transform: uppercase; color: #94a3b8; margin-bottom: 4px; }
+        .minimal-scope { font-size: 11.5px; color: #475569; line-height: 1.65; }
+        .minimal-expiry { font-size: 9px; color: #94a3b8; margin-top: 10px; letter-spacing: 0.05em; }
+        .minimal-expiry span { color: #1e293b; font-weight: 600; }
+        .minimal-sig-name { font-family: 'Alex Brush', cursive; font-size: 28px; color: #1e293b; line-height: 1.1; }
+        .minimal-sig-title { font-size: 8.5px; letter-spacing: 0.15em; text-transform: uppercase; color: #94a3b8; }
+        .minimal-addressed { font-size: 8.5px; color: #b0bec5; margin-top: 1px; }
+
+        /* ─── EXECUTIVE ─── */
+        #container-executive {
+            height: 100%; display: grid;
+            grid-template-rows: auto 1fr auto;
+            background: #1a1a2e; color: #e8dfc8; box-sizing: border-box;
+            position: relative; overflow: hidden;
+        }
+        #container-executive::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+            background: linear-gradient(90deg, #b49605, #e8c84c, #b49605);
+        }
+        #container-executive::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 5px;
+            background: linear-gradient(90deg, #b49605, #e8c84c, #b49605);
+        }
+        .exec-corner { position: absolute; width: 60px; height: 60px; border-color: #b49605; border-style: solid; opacity: 0.5; }
+        .exec-corner-tl { top: 14px; left: 14px; border-width: 1px 0 0 1px; }
+        .exec-corner-tr { top: 14px; right: 14px; border-width: 1px 1px 0 0; }
+        .exec-corner-bl { bottom: 14px; left: 14px; border-width: 0 0 1px 1px; }
+        .exec-corner-br { bottom: 14px; right: 14px; border-width: 0 1px 1px 0; }
+        .exec-header { padding: 26px 50px 16px; border-bottom: 1px solid rgba(180,150,5,0.25); display: flex; align-items: center; justify-content: space-between; }
+        .exec-body { padding: 22px 50px; display: flex; flex-direction: column; justify-content: center; }
+        .exec-footer { padding: 16px 50px 26px; border-top: 1px solid rgba(180,150,5,0.25); display: flex; justify-content: space-between; align-items: flex-end; }
+        .exec-ref { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #b49605; opacity: 0.8; }
+        .exec-title { font-family: 'Cinzel', serif; font-size: 24px; font-weight: 700; color: #e8dfc8; letter-spacing: 0.05em; margin-bottom: 2px; }
+        .exec-subtitle { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: #b49605; }
+        .exec-certifies { font-size: 11px; color: #a0a8b8; font-style: italic; margin-bottom: 8px; }
+        .exec-orgname { font-family: 'Cinzel', serif; font-size: 21px; color: #e8dfc8; font-weight: 600; margin-bottom: 2px; }
+        .exec-address { font-size: 10px; color: #6b7280; margin-bottom: 14px; }
+        .exec-scope-label { font-size: 8.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #b49605; margin-bottom: 4px; }
+        .exec-scope { font-size: 11px; color: #c4bbaa; line-height: 1.65; border-left: 2px solid rgba(180,150,5,0.4); padding-left: 12px; }
+        .exec-expiry { font-size: 9px; color: #6b7280; margin-top: 10px; letter-spacing: 0.08em; }
+        .exec-expiry span { color: #b49605; font-weight: 600; }
+        .exec-sig-name { font-family: 'Alex Brush', cursive; font-size: 30px; color: #b49605; line-height: 1.1; }
+        .exec-sig-title { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #6b7280; }
+        .exec-addressed { font-size: 9px; color: #4b5563; margin-top: 2px; }
+
+        /* ─── FORMAL MEMO ─── */
+        /* Pure white, single top rule, two-column footer — nearly zero ink */
+        #container-memo {
+            height: 100%; display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            background: #fff; box-sizing: border-box;
+        }
+        .memo-topbar { height: 6px; background: #006e96; }
+        .memo-header { padding: 20px 50px 14px; display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid #d1d5db; }
+        .memo-body   { padding: 22px 50px; display: flex; flex-direction: column; justify-content: center; }
+        .memo-footer { padding: 14px 50px 22px; border-top: 1px solid #d1d5db; display: flex; justify-content: space-between; align-items: flex-end; }
+        .memo-pcaa   { font-size: 8.5px; letter-spacing: 0.25em; text-transform: uppercase; color: #6b7280; }
+        .memo-title  { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700; color: #111827; }
+        .memo-subtitle { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #006e96; margin-top: 1px; }
+        .memo-ref    { font-size: 9px; color: #6b7280; text-align: right; }
+        .memo-certifies { font-size: 11.5px; color: #374151; margin-bottom: 8px; }
+        .memo-orgname { font-size: 20px; font-weight: 800; color: #111827; margin-bottom: 1px; }
+        .memo-address { font-size: 10px; color: #6b7280; margin-bottom: 14px; }
+        .memo-scope-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #6b7280; margin-bottom: 3px; border-left: 3px solid #006e96; padding-left: 8px; }
+        .memo-scope  { font-size: 11.5px; color: #374151; line-height: 1.7; padding-left: 11px; }
+        .memo-expiry { font-size: 9px; color: #6b7280; margin-top: 12px; }
+        .memo-expiry span { color: #111827; font-weight: 700; }
+        .memo-sig-name  { font-family: 'Alex Brush', cursive; font-size: 28px; color: #111827; line-height: 1; }
+        .memo-sig-line  { height: 1px; width: 130px; background: #9ca3af; margin: 4px 0; }
+        .memo-sig-title { font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #374151; }
+        .memo-addressed { font-size: 8.5px; color: #9ca3af; margin-top: 2px; }
+
+        /* ─── BORDERED LETTERHEAD ─── */
+        /* White background, decorative thin-rule frame only — very light ink */
+        #container-letterhead {
+            height: 100%; display: grid;
+            grid-template-rows: auto 1fr auto;
+            background: #fff; box-sizing: border-box;
+            padding: 16px; position: relative;
+        }
+        .lh-frame {
+            position: absolute; inset: 16px;
+            border: 1px solid #1e293b; pointer-events: none;
+        }
+        .lh-frame::before {
+            content: ''; position: absolute; inset: 5px;
+            border: 1px solid #1e293b; opacity: 0.25;
+        }
+        /* corner ornaments */
+        .lh-corner { position: absolute; width: 18px; height: 18px; border-color: #1e293b; border-style: solid; }
+        .lh-corner-tl { top: -1px; left: -1px;   border-width: 3px 0 0 3px; }
+        .lh-corner-tr { top: -1px; right: -1px;   border-width: 3px 3px 0 0; }
+        .lh-corner-bl { bottom: -1px; left: -1px; border-width: 0 0 3px 3px; }
+        .lh-corner-br { bottom: -1px; right: -1px;border-width: 0 3px 3px 0; }
+        .lh-header { padding: 26px 48px 14px; display: flex; align-items: center; gap: 18px; border-bottom: 1px solid #e5e7eb; }
+        .lh-body   { padding: 18px 48px; display: flex; flex-direction: column; justify-content: center; }
+        .lh-footer { padding: 12px 48px 24px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: flex-end; }
+        .lh-title  { font-family: 'Cinzel', serif; font-size: 21px; font-weight: 700; color: #1e293b; }
+        .lh-subtitle { font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: #64748b; }
+        .lh-ref    { font-size: 8.5px; color: #94a3b8; text-align: right; }
+        .lh-certifies { font-size: 11.5px; color: #475569; font-style: italic; margin-bottom: 7px; }
+        .lh-orgname { font-family: 'Cinzel', serif; font-size: 19px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+        .lh-address { font-size: 9.5px; color: #94a3b8; margin-bottom: 12px; }
+        .lh-scope-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #64748b; margin-bottom: 3px; }
+        .lh-divider { border: none; border-top: 1px dashed #cbd5e1; margin: 0 0 10px; }
+        .lh-scope  { font-size: 11.5px; color: #334155; line-height: 1.7; }
+        .lh-expiry { font-size: 9px; color: #94a3b8; margin-top: 10px; }
+        .lh-expiry span { color: #1e293b; font-weight: 700; }
+        .lh-sig-name  { font-family: 'Alex Brush', cursive; font-size: 28px; color: #1e293b; line-height: 1; }
+        .lh-sig-line  { height: 1px; width: 130px; background: #cbd5e1; margin: 4px 0; }
+        .lh-sig-title { font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #475569; }
+        .lh-addressed { font-size: 8.5px; color: #b0bec5; margin-top: 2px; }
+
+        /* ─── RIBBON ─── */
+        /* White body with a single thin colour ribbon header + footer strip — minimal ink */
+        #container-ribbon {
+            height: 100%; display: grid;
+            grid-template-rows: auto 1fr auto;
+            background: #fff; box-sizing: border-box;
+        }
+        .ribbon-header { background: #006e96; padding: 18px 46px; display: flex; align-items: center; justify-content: space-between; }
+        .ribbon-body   { padding: 24px 46px; display: flex; flex-direction: column; justify-content: center; }
+        .ribbon-footer { background: #f8fafc; border-top: 3px solid #006e96; padding: 14px 46px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .ribbon-title  { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700; color: #fff; }
+        .ribbon-subtitle { font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-top: 1px; }
+        .ribbon-ref    { font-size: 9px; color: rgba(255,255,255,0.65); text-align: right; }
+        .ribbon-certifies { font-size: 11.5px; color: #475569; margin-bottom: 8px; }
+        .ribbon-orgname { font-size: 22px; font-weight: 800; color: #006e96; margin-bottom: 2px; }
+        .ribbon-address { font-size: 10px; color: #94a3b8; margin-bottom: 14px; }
+        .ribbon-scope-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #006e96; margin-bottom: 4px; }
+        .ribbon-scope  { font-size: 11.5px; color: #374151; line-height: 1.7; }
+        .ribbon-expiry { font-size: 9px; color: #94a3b8; margin-top: 11px; }
+        .ribbon-expiry span { color: #006e96; font-weight: 700; }
+        .ribbon-sig-name  { font-family: 'Alex Brush', cursive; font-size: 28px; color: #1e293b; line-height: 1; }
+        .ribbon-sig-line  { height: 1px; width: 130px; background: #cbd5e1; margin: 4px 0; }
+        .ribbon-sig-title { font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #374151; }
+        .ribbon-addressed { font-size: 8.5px; color: #b0bec5; margin-top: 2px; }
+
+        /* logo common */
+        .cert-logo { height: 52px; width: auto; object-fit: contain; }
+        .cert-logo-sm { height: 42px; width: auto; object-fit: contain; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-white border-b border-slate-200 py-3 px-6 flex justify-between items-center no-print shrink-0 shadow-sm z-10">
+        <div class="flex items-center gap-3">
+            <div class="bg-[#006e96] text-white p-2.5 rounded-xl border border-[#b49605] shadow-md shadow-blue-900/10">
+                <i class="fa-solid fa-certificate text-lg text-amber-300"></i>
+            </div>
+            <div>
+                <h1 class="text-sm font-extrabold text-slate-800 tracking-tight">PCAA AVSEC Certificate Issuance Tool</h1>
+                <p class="text-[10px] text-slate-400 font-medium">Pakistan Civil Aviation Authority — Aviation Security</p>
+            </div>
+        </div>
+        <button onclick="exportHighResPDF()" class="bg-[#006e96] hover:bg-[#005574] text-white px-5 py-2 rounded-lg text-xs font-bold border border-[#b49605] transition flex items-center gap-2 shadow">
+            <i class="fa-solid fa-file-arrow-down text-amber-300"></i> Export PDF
+        </button>
+    </header>
+
+    <div class="flex-grow flex flex-row overflow-hidden">
+
+        <!-- SIDEBAR -->
+        <aside class="w-[400px] bg-white border-r border-slate-200 p-5 overflow-y-auto h-full space-y-5 no-print shrink-0">
+
+            <!-- 1. Layout -->
+            <div class="space-y-2.5">
+                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">1. Design Layout</h2>
+                <p class="text-[9px] text-slate-400 -mt-1">Printer-friendly designs use white backgrounds with minimal ink.</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="changeDesignStyle('classic')" id="btn-classic" class="layout-btn active p-2.5 border rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-50">
+                        <i class="fa-solid fa-scroll mr-1"></i> Traditional
+                    </button>
+                    <button onclick="changeDesignStyle('minimal')" id="btn-minimal" class="layout-btn p-2.5 border rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-50">
+                        <i class="fa-solid fa-minus mr-1"></i> Minimalist
+                    </button>
+                    <button onclick="changeDesignStyle('executive')" id="btn-executive" class="layout-btn p-2.5 border rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-50">
+                        <i class="fa-solid fa-star mr-1"></i> Executive
+                    </button>
+                    <button onclick="changeDesignStyle('memo')" id="btn-memo" class="layout-btn p-2.5 border rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-50">
+                        <i class="fa-solid fa-file-lines mr-1"></i> Formal Memo <span class="text-green-600 font-normal">🖨</span>
+                    </button>
+                    <button onclick="changeDesignStyle('letterhead')" id="btn-letterhead" class="layout-btn p-2.5 border rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-50">
+                        <i class="fa-solid fa-border-all mr-1"></i> Letterhead <span class="text-green-600 font-normal">🖨</span>
+                    </button>
+                    <button onclick="changeDesignStyle('ribbon')" id="btn-ribbon" class="layout-btn p-2.5 border rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-50">
+                        <i class="fa-solid fa-ribbon mr-1"></i> Ribbon <span class="text-green-600 font-normal">🖨</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. Certificate Type -->
+            <div class="space-y-2.5">
+                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">2. Certificate Type</h2>
+                <select id="input-cert-type" onchange="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
+                    <option value="Approved Training Organisation">Approved Training Organisation (ATO)</option>
+                    <option value="Regulated Agent Certification">Regulated Agent Certification (RAC)</option>
+                    <option value="Known Consignor Certificate">Known Consignor Certificate (KCC)</option>
+                    <option value="Airport Operator Security Programme">Airport Operator Security Programme (AOSP)</option>
+                    <option value="Ground Handling Agent Certification">Ground Handling Agent Certification (GHAC)</option>
+                    <option value="In-Flight Catering Security Certification">In-Flight Catering Security Certification (IFCSC)</option>
+                    <option value="Air Cargo Security Programme">Air Cargo Security Programme (ACSP)</option>
+                </select>
+            </div>
+
+            <!-- 3. Entity Details -->
+            <div class="space-y-2.5">
+                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">3. Entity Details</h2>
+                <input type="text" id="input-org-name" placeholder="Organisation Name" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
+                <input type="text" id="input-org-address" placeholder="Organisation Address" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="input-add-title" placeholder="Addressed To (Name/Title)" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
+                    <input type="text" id="input-add-org" placeholder="Addressed To (Org)" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
+                </div>
+            </div>
+
+            <!-- 4. Certificate Parameters -->
+            <div class="space-y-2.5">
+                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">4. Certificate Parameters</h2>
+                <input type="text" id="input-ref-no" placeholder="Reference Number (e.g. PCAA/AVSEC/2024/001)" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[9px] font-semibold text-slate-400 uppercase tracking-wide ml-0.5">Issue Date</label>
+                        <input type="text" id="input-issue-date" placeholder="e.g. 01 January 2024" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none mt-1">
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-semibold text-slate-400 uppercase tracking-wide ml-0.5">Expiry Date</label>
+                        <input type="text" id="input-expiry-date" placeholder="e.g. 31 December 2026" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none mt-1">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[9px] font-semibold text-slate-400 uppercase tracking-wide ml-0.5">Scope of Certification</label>
+                    <textarea id="input-scope" rows="3" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none mt-1 resize-none"></textarea>
+                    <button onclick="autoFillScope()" class="text-[9px] text-[#006e96] font-semibold mt-1 hover:underline">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Auto-fill from cert type
+                    </button>
+                </div>
+            </div>
+
+            <!-- 5. Signatory -->
+            <div class="space-y-2.5">
+                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">5. Signatory</h2>
+                <input type="text" id="input-sig-name" placeholder="Signatory Name (e.g. Air Cdre Aamir Siddiqui)" oninput="syncFields()" value="Director General Security" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
+                <input type="text" id="input-sig-title" placeholder="Signatory Title" oninput="syncFields()" value="Director Security, PCAA" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
+            </div>
+
+            <!-- 6. QR -->
+            <div class="space-y-2.5">
+                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">6. QR Security Registry</h2>
+                <input type="text" id="input-qr-data" oninput="generateQRCode()" placeholder="Verification URL or Registry ID" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
+            </div>
+
+        </aside>
+
+        <!-- CERTIFICATE PREVIEW -->
+        <main class="flex-grow p-6 flex flex-col items-center bg-slate-100 overflow-y-auto">
+            <div class="preview-outer-container" id="scale-outer">
+                <div class="cert-canvas-wrapper" id="certificate-target">
+
+                    <!-- ── TRADITIONAL ── -->
+                    <div id="container-classic">
+                        <div class="classic-header">
+                            <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'">
+                            <div class="flex-grow text-center">
+                                <div class="text-[9px] tracking-[0.3em] text-slate-400 uppercase mb-1">Pakistan Civil Aviation Authority</div>
+                                <div class="classic-title">Certificate of Approval</div>
+                                <div class="classic-subtitle" id="view-classic-cert-type">Approved Training Organisation</div>
+                            </div>
+                            <div class="classic-seal"><i class="fa-solid fa-stamp"></i></div>
+                        </div>
+                        <div class="classic-body">
+                            <div class="classic-certifies">This is to certify that the following entity has been assessed and found to comply with all applicable requirements of the National Aviation Security Programme (NASP):</div>
+                            <div class="classic-orgname" id="view-classic-org">Organisation Name</div>
+                            <div class="classic-address" id="view-classic-address">—</div>
+                            <div class="classic-scope-label">Scope of Certification</div>
+                            <div class="classic-scope" id="view-classic-scope">—</div>
+                            <div class="classic-expiry" id="view-classic-expiry">Valid from <span id="view-classic-issue">—</span> — Expires: <span id="view-classic-exp">—</span></div>
+                        </div>
+                        <div class="classic-footer">
+                            <div>
+                                <div class="classic-sig-name" id="view-classic-sig-name">Director General Security</div>
+                                <div style="height:1px; width:140px; background:#ccc; margin:4px 0;"></div>
+                                <div class="classic-sig-title" id="view-classic-sig-title">Director Security, PCAA</div>
+                                <div class="classic-addressed" id="view-classic-addressed"></div>
+                            </div>
+                            <div class="text-right">
+                                <div class="classic-ref" id="view-classic-ref">Ref: —</div>
+                                <canvas id="view-classic-qr" width="60" height="60" class="mt-2 ml-auto"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── MINIMALIST ── -->
+                    <div id="container-minimal" class="hidden">
+                        <div class="minimal-header">
+                            <img src="Untitled-removebg-preview.png" class="cert-logo-sm" onerror="this.style.display='none'">
+                            <div class="text-right">
+                                <div class="minimal-title">Certificate of Approval</div>
+                                <div class="minimal-subtitle" id="view-minimal-cert-type">Approved Training Organisation</div>
+                            </div>
+                        </div>
+                        <div class="minimal-body">
+                            <div class="minimal-ref mb-4" id="view-minimal-ref">Reference: —</div>
+                            <div class="minimal-certifies">This is to certify that</div>
+                            <div class="minimal-orgname" id="view-minimal-org">Organisation Name</div>
+                            <div class="minimal-address" id="view-minimal-address">—</div>
+                            <hr class="minimal-divider">
+                            <div class="minimal-scope-label">Scope</div>
+                            <div class="minimal-scope" id="view-minimal-scope">—</div>
+                            <div class="minimal-expiry" id="view-minimal-expiry">Issued: <span id="view-minimal-issue">—</span> &nbsp;|&nbsp; Expires: <span id="view-minimal-exp">—</span></div>
+                        </div>
+                        <div class="minimal-footer">
+                            <div>
+                                <div class="minimal-sig-name" id="view-minimal-sig-name">Director General Security</div>
+                                <div class="minimal-sig-title" id="view-minimal-sig-title">Director Security, PCAA</div>
+                                <div class="minimal-addressed" id="view-minimal-addressed"></div>
+                            </div>
+                            <canvas id="view-minimal-qr" width="55" height="55"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- ── EXECUTIVE ── -->
+                    <div id="container-executive" class="hidden">
+                        <div class="exec-corner exec-corner-tl"></div>
+                        <div class="exec-corner exec-corner-tr"></div>
+                        <div class="exec-corner exec-corner-bl"></div>
+                        <div class="exec-corner exec-corner-br"></div>
+                        <div class="exec-header">
+                            <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'" style="filter: brightness(0) invert(1); opacity:0.9;">
+                            <div class="text-right">
+                                <div class="exec-title">Certificate of Approval</div>
+                                <div class="exec-subtitle" id="view-executive-cert-type">Approved Training Organisation</div>
+                                <div class="exec-ref mt-1" id="view-exec-ref">—</div>
+                            </div>
+                        </div>
+                        <div class="exec-body">
+                            <div class="exec-certifies">This is to certify that</div>
+                            <div class="exec-orgname" id="view-executive-org">Organisation Name</div>
+                            <div class="exec-address" id="view-exec-address">—</div>
+                            <div class="exec-scope-label">Scope of Certification</div>
+                            <div class="exec-scope" id="view-executive-scope">—</div>
+                            <div class="exec-expiry" id="view-exec-expiry">Valid from <span id="view-exec-issue">—</span> to <span id="view-exec-exp">—</span></div>
+                        </div>
+                        <div class="exec-footer">
+                            <div>
+                                <div class="exec-sig-name" id="view-exec-sig-name">Director General Security</div>
+                                <div style="height:1px; width:150px; background:rgba(180,150,5,0.4); margin: 4px 0;"></div>
+                                <div class="exec-sig-title" id="view-exec-sig-title">Director Security, PCAA</div>
+                                <div class="exec-addressed" id="view-exec-addressed"></div>
+                            </div>
+                            <canvas id="view-executive-qr" width="65" height="65"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- ── FORMAL MEMO ── -->
+                    <div id="container-memo" class="hidden">
+                        <div class="memo-topbar"></div>
+                        <div class="memo-header">
+                            <div class="flex items-center gap-4">
+                                <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'">
+                                <div>
+                                    <div class="memo-pcaa">Pakistan Civil Aviation Authority — Aviation Security</div>
+                                    <div class="memo-title">Certificate of Approval</div>
+                                    <div class="memo-subtitle" id="view-memo-cert-type">Approved Training Organisation</div>
+                                </div>
+                            </div>
+                            <div class="memo-ref">
+                                <div id="view-memo-ref">—</div>
+                                <div id="view-memo-addressed" style="font-size:8px;color:#b0bec5;margin-top:3px;"></div>
+                            </div>
+                        </div>
+                        <div class="memo-body">
+                            <div class="memo-certifies">This is to certify that the following entity has been duly assessed and found to comply with all applicable requirements of the National Aviation Security Programme (NASP):</div>
+                            <div class="memo-orgname" id="view-memo-org">Organisation Name</div>
+                            <div class="memo-address" id="view-memo-address">—</div>
+                            <div class="memo-scope-label">Scope of Certification</div>
+                            <div class="memo-scope" id="view-memo-scope">—</div>
+                            <div class="memo-expiry">Valid from <span id="view-memo-issue">—</span> &nbsp;·&nbsp; Expires: <span id="view-memo-exp">—</span></div>
+                        </div>
+                        <div class="memo-footer">
+                            <div>
+                                <div class="memo-sig-name" id="view-memo-sig-name">Director General Security</div>
+                                <div class="memo-sig-line"></div>
+                                <div class="memo-sig-title" id="view-memo-sig-title">Director Security, PCAA</div>
+                                <div class="memo-addressed" id="view-memo-issuedto"></div>
+                            </div>
+                            <canvas id="view-memo-qr" width="58" height="58"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- ── BORDERED LETTERHEAD ── -->
+                    <div id="container-letterhead" class="hidden">
+                        <div class="lh-frame">
+                            <div class="lh-corner lh-corner-tl"></div>
+                            <div class="lh-corner lh-corner-tr"></div>
+                            <div class="lh-corner lh-corner-bl"></div>
+                            <div class="lh-corner lh-corner-br"></div>
+                        </div>
+                        <div class="lh-header">
+                            <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'">
+                            <div class="flex-grow text-center">
+                                <div style="font-size:8px;letter-spacing:0.3em;text-transform:uppercase;color:#94a3b8;margin-bottom:3px;">Pakistan Civil Aviation Authority</div>
+                                <div class="lh-title">Certificate of Approval</div>
+                                <div class="lh-subtitle" id="view-lh-cert-type">Approved Training Organisation</div>
+                            </div>
+                            <div class="lh-ref" id="view-lh-ref">—</div>
+                        </div>
+                        <div class="lh-body">
+                            <div class="lh-certifies">This is to certify that the following entity has been assessed and found to comply with all applicable requirements of the National Aviation Security Programme (NASP):</div>
+                            <div class="lh-orgname" id="view-lh-org">Organisation Name</div>
+                            <div class="lh-address" id="view-lh-address">—</div>
+                            <div class="lh-scope-label">Scope of Certification</div>
+                            <hr class="lh-divider">
+                            <div class="lh-scope" id="view-lh-scope">—</div>
+                            <div class="lh-expiry">Valid from <span id="view-lh-issue">—</span> &nbsp;·&nbsp; Expires: <span id="view-lh-exp">—</span></div>
+                        </div>
+                        <div class="lh-footer">
+                            <div>
+                                <div class="lh-sig-name" id="view-lh-sig-name">Director General Security</div>
+                                <div class="lh-sig-line"></div>
+                                <div class="lh-sig-title" id="view-lh-sig-title">Director Security, PCAA</div>
+                                <div class="lh-addressed" id="view-lh-addressed"></div>
+                            </div>
+                            <canvas id="view-lh-qr" width="55" height="55"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- ── RIBBON ── -->
+                    <div id="container-ribbon" class="hidden">
+                        <div class="ribbon-header">
+                            <div class="flex items-center gap-4">
+                                <img src="Untitled-removebg-preview.png" class="cert-logo" onerror="this.style.display='none'" style="filter:brightness(0) invert(1);opacity:0.92;">
+                                <div>
+                                    <div class="ribbon-title">Certificate of Approval</div>
+                                    <div class="ribbon-subtitle" id="view-ribbon-cert-type">Approved Training Organisation</div>
+                                </div>
+                            </div>
+                            <div class="ribbon-ref">
+                                <div id="view-ribbon-ref">—</div>
+                                <div id="view-ribbon-addressed" style="font-size:8px;color:rgba(255,255,255,0.45);margin-top:3px;"></div>
+                            </div>
+                        </div>
+                        <div class="ribbon-body">
+                            <div class="ribbon-certifies">This is to certify that the following entity has been assessed and found to comply with all applicable requirements of the National Aviation Security Programme (NASP):</div>
+                            <div class="ribbon-orgname" id="view-ribbon-org">Organisation Name</div>
+                            <div class="ribbon-address" id="view-ribbon-address">—</div>
+                            <div class="ribbon-scope-label">Scope of Certification</div>
+                            <div class="ribbon-scope" id="view-ribbon-scope">—</div>
+                            <div class="ribbon-expiry">Valid from <span id="view-ribbon-issue">—</span> &nbsp;·&nbsp; Expires: <span id="view-ribbon-exp">—</span></div>
+                        </div>
+                        <div class="ribbon-footer">
+                            <div>
+                                <div class="ribbon-sig-name" id="view-ribbon-sig-name">Director General Security</div>
+                                <div class="ribbon-sig-line"></div>
+                                <div class="ribbon-sig-title" id="view-ribbon-sig-title">Director Security, PCAA</div>
+                                <div class="ribbon-addressed" id="view-ribbon-issuedto"></div>
+                            </div>
+                            <canvas id="view-ribbon-qr" width="58" height="58"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const scopeMap = {
+            "Approved Training Organisation": "Provision of specialised Civil Aviation Security (AVSEC) training programmes in accordance with Annex 17 to the Convention on International Civil Aviation and the Pakistan National Aviation Security Programme.",
+            "Regulated Agent Certification": "Execution and administration of standard cargo and mail screening procedures, chain-of-custody controls, and logistics terminal security audits in accordance with PCAA security directives.",
+            "Known Consignor Certificate": "Origination, preparation, and tendering of cargo and mail for carriage by air, subject to approved security controls and supply-chain integrity measures as stipulated by PCAA.",
+            "Airport Operator Security Programme": "Development, implementation, and maintenance of the Airport Security Programme (ASP), encompassing access control, perimeter security, passenger and baggage screening, and airside operations security.",
+            "Ground Handling Agent Certification": "Provision of ramp, baggage, cargo, and passenger handling services within the security-restricted areas of the aerodrome in compliance with PCAA-approved ground handling security standards.",
+            "In-Flight Catering Security Certification": "Preparation, security control, and delivery of in-flight catering supplies and equipment to aircraft in accordance with PCAA in-flight catering security requirements.",
+            "Air Cargo Security Programme": "Acceptance, screening, handling, and transportation of air cargo and mail in accordance with the approved Air Cargo Security Programme (ACSP) and applicable PCAA directives."
+        };
+
+        let currentStyle = 'classic';
+
+        function syncFields() {
+            const org      = document.getElementById('input-org-name').value || '—';
+            const address  = document.getElementById('input-org-address').value || '—';
+            const cert     = document.getElementById('input-cert-type').value;
+            const scope    = document.getElementById('input-scope').value || '—';
+            const refNo    = document.getElementById('input-ref-no').value;
+            const issue    = document.getElementById('input-issue-date').value || '—';
+            const expiry   = document.getElementById('input-expiry-date').value || '—';
+            const addTitle = document.getElementById('input-add-title').value;
+            const addOrg   = document.getElementById('input-add-org').value;
+            const sigName  = document.getElementById('input-sig-name').value || 'Director General Security';
+            const sigTitle = document.getElementById('input-sig-title').value || 'Director Security, PCAA';
+
+            const refDisplay = refNo ? `Ref: ${refNo}` : '—';
+            const addressedLine = [addTitle, addOrg].filter(Boolean).join(' — ');
+
+            // Cert type, org, scope — shared across all
+            ['classic','minimal','executive','memo','lh','ribbon'].forEach(s => {
+                setText(`view-${s}-cert-type`, cert);
+                setText(`view-${s}-org`,       org);
+                setText(`view-${s}-scope`,      scope);
+            });
+
+            // Addresses
+            setText('view-classic-address', address);
+            setText('view-minimal-address', address);
+            setText('view-exec-address',    address);
+            setText('view-memo-address',    address);
+            setText('view-lh-address',      address);
+            setText('view-ribbon-address',  address);
+
+            // Ref numbers
+            setText('view-classic-ref',  refDisplay);
+            setText('view-minimal-ref',  refNo ? `Reference: ${refNo}` : 'Reference: —');
+            setText('view-exec-ref',     refNo ? `Ref: ${refNo}` : '—');
+            setText('view-memo-ref',     refDisplay);
+            setText('view-lh-ref',       refDisplay);
+            setText('view-ribbon-ref',   refDisplay);
+
+            // Dates
+            ['view-classic-issue','view-minimal-issue','view-exec-issue',
+             'view-memo-issue','view-lh-issue','view-ribbon-issue'].forEach(id => setText(id, issue));
+            ['view-classic-exp','view-minimal-exp','view-exec-exp',
+             'view-memo-exp','view-lh-exp','view-ribbon-exp'].forEach(id => setText(id, expiry));
+
+            // Signatory
+            ['classic','minimal','exec','memo','lh','ribbon'].forEach(s => {
+                setText(`view-${s}-sig-name`,  sigName);
+                setText(`view-${s}-sig-title`, sigTitle);
+            });
+
+            // Addressed to
+            const issuedTo = addressedLine ? `Issued to: ${addressedLine}` : '';
+            setText('view-classic-addressed',  issuedTo);
+            setText('view-minimal-addressed',  issuedTo);
+            setText('view-exec-addressed',     issuedTo);
+            setText('view-memo-addressed',     issuedTo);
+            setText('view-memo-issuedto',      issuedTo);
+            setText('view-lh-addressed',       issuedTo);
+            setText('view-ribbon-addressed',   issuedTo);
+            setText('view-ribbon-issuedto',    issuedTo);
+        }
+
+        function setText(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = val;
+        }
+
+        function autoFillScope() {
+            const cert = document.getElementById('input-cert-type').value;
+            const scope = scopeMap[cert] || '';
+            document.getElementById('input-scope').value = scope;
+            syncFields();
+        }
+
+        function changeDesignStyle(style) {
+            ['classic', 'minimal', 'executive', 'memo', 'letterhead', 'ribbon'].forEach(s => {
+                document.getElementById(`container-${s}`).classList.add('hidden');
+                const btn = document.getElementById(`btn-${s}`);
+                if (btn) btn.classList.remove('active');
+            });
+            document.getElementById(`container-${style}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-${style}`);
+            if (activeBtn) activeBtn.classList.add('active');
+            currentStyle = style;
+        }
+
+        function generateQRCode() {
+            const qrText = document.getElementById('input-qr-data').value || 'PCAA-AVSEC';
+            [
+                { id: 'view-classic-qr',   dark: false },
+                { id: 'view-minimal-qr',   dark: false },
+                { id: 'view-executive-qr', dark: true  },
+                { id: 'view-memo-qr',      dark: false },
+                { id: 'view-lh-qr',        dark: false },
+                { id: 'view-ribbon-qr',    dark: false },
+            ].forEach(({ id, dark }) => {
+                const canvas = document.getElementById(id);
+                if (canvas) new QRious({
+                    element: canvas, value: qrText, size: 100,
+                    background: dark ? 'transparent' : '#ffffff',
+                    foreground: dark ? '#f6d860' : '#1e293b',
+                    backgroundAlpha: dark ? 0 : 1,
+                    level: 'M'
+                });
+            });
+        }
+
+        function exportHighResPDF() {
+            const el = document.getElementById('certificate-target');
+            const opt = {
+                margin: 0,
+                filename: `PCAA_AVSEC_Certificate_${Date.now()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 3, useCORS: true, logging: false },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            html2pdf().set(opt).from(el).save();
+        }
+
+        // Responsive scaling
+        function scalePreview() {
+            const wrapper = document.querySelector('.cert-canvas-wrapper');
+            const outer   = document.getElementById('scale-outer');
+            if (!wrapper || !outer) return;
+            const availW  = outer.clientWidth - 48;
+            const scale   = Math.min(1, availW / 950);
+            wrapper.style.transform = `scale(${scale})`;
+            outer.style.height = `${Math.round(671 * scale)}px`;
+        }
+
+        window.addEventListener('resize', scalePreview);
+
+        window.onload = () => {
+            autoFillScope();
+            generateQRCode();
+            scalePreview();
+        };
+    </script>
+</body>
+</html>
