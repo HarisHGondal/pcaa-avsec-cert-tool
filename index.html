@@ -13,20 +13,116 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        body { font-family: 'Montserrat', sans-serif; background-color: #f1f5f9; color: #1e293b; overflow-x: hidden; }
+        /* ── Design tokens ── */
+        :root {
+            --pcaa-blue:   #006e96;
+            --pcaa-blue-d: #005574;
+            --pcaa-gold:   #b49605;
+            --surface:     #f8fafc;
+            --border:      #e2e8f0;
+            --text-primary:#1e293b;
+            --text-secondary:#64748b;
+            --text-muted:  #94a3b8;
+            --radius:      8px;
+            --shadow-sm:   0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md:   0 4px 12px rgba(0,0,0,0.08);
+        }
 
-        .preview-outer-container { width: 100%; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; transition: height 0.2s ease; min-height: 300px; padding-top: 10px; }
-        .cert-canvas-wrapper { width: 950px; height: 671px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); border-radius: 4px; overflow: hidden; background-color: #ffffff; flex-shrink: 0; transform-origin: top center; transition: transform 0.1s ease; }
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; background: var(--surface); color: var(--text-primary); overflow-x: hidden; font-size: 13px; line-height: 1.5; }
+
+        /* ── Sidebar form components ── */
+        .sidebar-section {
+            background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+            padding: 16px; box-shadow: var(--shadow-sm);
+        }
+        .section-title {
+            font-size: 10px; font-weight: 700; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.12em;
+            display: flex; align-items: center; gap: 6px; margin-bottom: 12px;
+        }
+        .section-title .num {
+            width: 18px; height: 18px; background: var(--pcaa-blue); color: #fff;
+            border-radius: 50%; font-size: 9px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .form-group { display: flex; flex-direction: column; gap: 4px; }
+        .form-label { font-size: 10px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.03em; }
+        .form-input {
+            width: 100%; border: 1.5px solid var(--border); padding: 8px 10px;
+            border-radius: 6px; font-size: 11.5px; font-family: 'Montserrat', sans-serif;
+            color: var(--text-primary); background: #fff; outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .form-input:focus { border-color: var(--pcaa-blue); box-shadow: 0 0 0 3px rgba(0,110,150,0.12); }
+        .form-input::placeholder { color: var(--text-muted); }
+        .form-input-sm { font-size: 11px; padding: 7px 10px; }
+        textarea.form-input { resize: none; }
+        select.form-input { cursor: pointer; }
+
+        /* ── Layout buttons ── */
+        .layout-btn {
+            padding: 8px 6px; border: 1.5px solid var(--border); border-radius: 6px;
+            font-size: 10px; font-weight: 600; color: var(--text-secondary);
+            background: #fff; cursor: pointer; transition: all 0.15s;
+            display: flex; align-items: center; justify-content: center; gap: 4px;
+            text-align: center; line-height: 1.3;
+        }
+        .layout-btn:hover { border-color: var(--pcaa-blue); color: var(--pcaa-blue); background: #f0f8fc; }
+        .layout-btn.active {
+            background: var(--pcaa-blue); color: #fff; border-color: var(--pcaa-blue);
+            box-shadow: 0 2px 8px rgba(0,110,150,0.35);
+        }
+        .layout-btn.printer-tag::after {
+            content: 'LOW INK'; font-size: 7px; font-weight: 700;
+            background: #dcfce7; color: #16a34a; border-radius: 3px;
+            padding: 1px 4px; margin-left: 2px; letter-spacing: 0.05em;
+        }
+        .layout-btn.active.printer-tag::after { background: rgba(255,255,255,0.25); color: #fff; }
+
+        /* ── Action button ── */
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--pcaa-blue); color: #fff; font-family: 'Montserrat', sans-serif;
+            font-size: 12px; font-weight: 700; padding: 10px 20px; border-radius: 8px;
+            border: none; cursor: pointer; transition: background 0.15s, box-shadow 0.15s;
+            box-shadow: 0 2px 6px rgba(0,110,150,0.3);
+        }
+        .btn-primary:hover { background: var(--pcaa-blue-d); box-shadow: 0 4px 12px rgba(0,110,150,0.4); }
+        .btn-primary:active { transform: translateY(1px); }
+        .btn-ghost {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: transparent; color: var(--text-secondary); font-family: 'Montserrat', sans-serif;
+            font-size: 11px; font-weight: 600; padding: 8px 14px; border-radius: 8px;
+            border: 1.5px solid var(--border); cursor: pointer; transition: all 0.15s;
+        }
+        .btn-ghost:hover { border-color: #94a3b8; color: var(--text-primary); }
+        .btn-link { background: none; border: none; padding: 0; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 600; color: var(--pcaa-blue); text-decoration: underline; }
+
+        /* ── Toast ── */
+        #toast {
+            position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+            background: #1e293b; color: #fff; padding: 12px 18px; border-radius: 10px;
+            font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2); pointer-events: none;
+            opacity: 0; transform: translateY(12px);
+            transition: opacity 0.25s, transform 0.25s;
+        }
+        #toast.show { opacity: 1; transform: translateY(0); }
+        #toast .toast-icon { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 10px; }
+        #toast.success .toast-icon { background: #16a34a; }
+        #toast.error   .toast-icon { background: #dc2626; }
+        #toast.loading .toast-icon { background: var(--pcaa-blue); }
+
+        /* ── Preview area ── */
+        .preview-outer-container { width: 100%; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; transition: height 0.2s ease; min-height: 300px; padding-top: 12px; }
+        .cert-canvas-wrapper { width: 950px; height: 671px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); border-radius: 6px; overflow: hidden; background: #fff; flex-shrink: 0; transform-origin: top center; transition: transform 0.1s ease; }
 
         @media print {
-            .no-print, header, aside { display: none !important; }
+            .no-print, header, aside, #toast { display: none !important; }
             .cert-canvas-wrapper { position: fixed !important; top: 0 !important; left: 0 !important; width: 297mm !important; height: 210mm !important; transform: none !important; border: none !important; box-shadow: none !important; }
             @page { size: A4 landscape; margin: 0; }
         }
-
-        /* ─── LAYOUT BUTTON ACTIVE STATE ─── */
-        .layout-btn { transition: all 0.15s; }
-        .layout-btn.active { background: #006e96; color: white; border-color: #006e96; }
 
         /* ─── CLASSIC (TRADITIONAL) ─── */
         #container-classic {
@@ -220,118 +316,178 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
+    <!-- Toast -->
+    <div id="toast" role="alert" aria-live="polite">
+        <span class="toast-icon"><i class="fa-solid fa-check" style="font-size:9px;"></i></span>
+        <span id="toast-msg">Done</span>
+    </div>
+
     <!-- HEADER -->
-    <header class="bg-white border-b border-slate-200 py-3 px-6 flex justify-between items-center no-print shrink-0 shadow-sm z-10">
-        <div class="flex items-center gap-3">
-            <div class="bg-[#006e96] text-white p-2.5 rounded-xl border border-[#b49605] shadow-md shadow-blue-900/10">
-                <i class="fa-solid fa-certificate text-lg text-amber-300"></i>
+    <header class="no-print shrink-0 z-10" style="background:#fff; border-bottom:1px solid #e2e8f0; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+        <div style="padding:0 24px; height:58px; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+            <!-- Brand -->
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:38px;height:38px;background:var(--pcaa-blue);border-radius:10px;border:1.5px solid var(--pcaa-gold);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,110,150,0.25);">
+                    <i class="fa-solid fa-certificate" style="color:#fbbf24;font-size:16px;"></i>
+                </div>
+                <div>
+                    <div style="font-size:13px;font-weight:800;color:#0f172a;letter-spacing:-0.02em;line-height:1.2;">PCAA AVSEC Certificate Issuance Tool</div>
+                    <div style="font-size:10px;color:var(--text-muted);font-weight:500;letter-spacing:0.02em;">Pakistan Civil Aviation Authority — Aviation Security Directorate</div>
+                </div>
             </div>
-            <div>
-                <h1 class="text-sm font-extrabold text-slate-800 tracking-tight">PCAA AVSEC Certificate Issuance Tool</h1>
-                <p class="text-[10px] text-slate-400 font-medium">Pakistan Civil Aviation Authority — Aviation Security</p>
+            <!-- Actions -->
+            <div style="display:flex;align-items:center;gap:8px;">
+                <button onclick="resetForm()" class="btn-ghost no-print">
+                    <i class="fa-solid fa-rotate-left" style="font-size:10px;"></i> Reset
+                </button>
+                <button onclick="exportHighResPDF()" class="btn-primary no-print" style="border:1.5px solid var(--pcaa-gold);">
+                    <i class="fa-solid fa-file-arrow-down" style="color:#fbbf24;"></i> Export PDF
+                </button>
             </div>
         </div>
-        <button onclick="exportHighResPDF()" class="bg-[#006e96] hover:bg-[#005574] text-white px-5 py-2 rounded-lg text-xs font-bold border border-[#b49605] transition flex items-center gap-2 shadow">
-            <i class="fa-solid fa-file-arrow-down text-amber-300"></i> Export PDF
-        </button>
     </header>
 
     <div class="flex-grow flex flex-row overflow-hidden">
 
         <!-- SIDEBAR -->
-        <aside class="w-[400px] bg-white border-r border-slate-200 p-5 overflow-y-auto h-full space-y-5 no-print shrink-0">
+        <aside class="no-print shrink-0" style="width:410px;background:var(--surface);border-right:1px solid var(--border);padding:16px;overflow-y:auto;height:100%;display:flex;flex-direction:column;gap:12px;">
 
             <!-- 1. Layout -->
             <div class="space-y-2.5">
                 <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">1. Design Layout</h2>
-                <p class="text-[9px] text-slate-400 -mt-1">Printer-friendly designs use white backgrounds with minimal ink.</p>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="changeDesignStyle('classic')" id="btn-classic" class="layout-btn active p-2.5 border rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-50">
-                        <i class="fa-solid fa-scroll mr-1"></i> Traditional
+            <!-- § 1 Design Layout -->
+            <div class="sidebar-section">
+                <div class="section-title"><span class="num">1</span> Design Layout</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <button onclick="changeDesignStyle('classic')" id="btn-classic" class="layout-btn active">
+                        <i class="fa-solid fa-scroll"></i> Traditional
                     </button>
-                    <button onclick="changeDesignStyle('minimal')" id="btn-minimal" class="layout-btn p-2.5 border rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-50">
-                        <i class="fa-solid fa-minus mr-1"></i> Minimalist
+                    <button onclick="changeDesignStyle('minimal')" id="btn-minimal" class="layout-btn">
+                        <i class="fa-solid fa-minus"></i> Minimalist
                     </button>
-                    <button onclick="changeDesignStyle('executive')" id="btn-executive" class="layout-btn p-2.5 border rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-50">
-                        <i class="fa-solid fa-star mr-1"></i> Executive
+                    <button onclick="changeDesignStyle('executive')" id="btn-executive" class="layout-btn">
+                        <i class="fa-solid fa-star"></i> Executive
                     </button>
-                    <button onclick="changeDesignStyle('memo')" id="btn-memo" class="layout-btn p-2.5 border rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-50">
-                        <i class="fa-solid fa-file-lines mr-1"></i> Formal Memo <span class="text-green-600 font-normal">🖨</span>
+                    <button onclick="changeDesignStyle('memo')" id="btn-memo" class="layout-btn printer-tag">
+                        <i class="fa-solid fa-file-lines"></i> Formal Memo
                     </button>
-                    <button onclick="changeDesignStyle('letterhead')" id="btn-letterhead" class="layout-btn p-2.5 border rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-50">
-                        <i class="fa-solid fa-border-all mr-1"></i> Letterhead <span class="text-green-600 font-normal">🖨</span>
+                    <button onclick="changeDesignStyle('letterhead')" id="btn-letterhead" class="layout-btn printer-tag">
+                        <i class="fa-solid fa-border-all"></i> Letterhead
                     </button>
-                    <button onclick="changeDesignStyle('ribbon')" id="btn-ribbon" class="layout-btn p-2.5 border rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-50">
-                        <i class="fa-solid fa-ribbon mr-1"></i> Ribbon <span class="text-green-600 font-normal">🖨</span>
+                    <button onclick="changeDesignStyle('ribbon')" id="btn-ribbon" class="layout-btn printer-tag">
+                        <i class="fa-solid fa-ribbon"></i> Ribbon
                     </button>
                 </div>
             </div>
 
-            <!-- 2. Certificate Type -->
-            <div class="space-y-2.5">
-                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">2. Certificate Type</h2>
-                <select id="input-cert-type" onchange="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
-                    <option value="Approved Training Organisation">Approved Training Organisation (ATO)</option>
-                    <option value="Regulated Agent Certification">Regulated Agent Certification (RAC)</option>
-                    <option value="Known Consignor Certificate">Known Consignor Certificate (KCC)</option>
-                    <option value="Airport Operator Security Programme">Airport Operator Security Programme (AOSP)</option>
-                    <option value="Ground Handling Agent Certification">Ground Handling Agent Certification (GHAC)</option>
-                    <option value="In-Flight Catering Security Certification">In-Flight Catering Security Certification (IFCSC)</option>
-                    <option value="Air Cargo Security Programme">Air Cargo Security Programme (ACSP)</option>
-                </select>
-            </div>
-
-            <!-- 3. Entity Details -->
-            <div class="space-y-2.5">
-                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">3. Entity Details</h2>
-                <input type="text" id="input-org-name" placeholder="Organisation Name" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
-                <input type="text" id="input-org-address" placeholder="Organisation Address" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
-                <div class="grid grid-cols-2 gap-2">
-                    <input type="text" id="input-add-title" placeholder="Addressed To (Name/Title)" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
-                    <input type="text" id="input-add-org" placeholder="Addressed To (Org)" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
+            <!-- § 2 Certificate Type -->
+            <div class="sidebar-section">
+                <div class="section-title"><span class="num">2</span> Certificate Type</div>
+                <div class="form-group">
+                    <label class="form-label" for="input-cert-type">Type of Certification</label>
+                    <select id="input-cert-type" onchange="syncFields()" class="form-input">
+                        <option value="Approved Training Organisation">Approved Training Organisation (ATO)</option>
+                        <option value="Regulated Agent Certification">Regulated Agent Certification (RAC)</option>
+                        <option value="Known Consignor Certificate">Known Consignor Certificate (KCC)</option>
+                        <option value="Airport Operator Security Programme">Airport Operator Security Programme (AOSP)</option>
+                        <option value="Ground Handling Agent Certification">Ground Handling Agent Certification (GHAC)</option>
+                        <option value="In-Flight Catering Security Certification">In-Flight Catering Security Certification (IFCSC)</option>
+                        <option value="Air Cargo Security Programme">Air Cargo Security Programme (ACSP)</option>
+                    </select>
                 </div>
             </div>
 
-            <!-- 4. Certificate Parameters -->
-            <div class="space-y-2.5">
-                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">4. Certificate Parameters</h2>
-                <input type="text" id="input-ref-no" placeholder="Reference Number (e.g. PCAA/AVSEC/2024/001)" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-[9px] font-semibold text-slate-400 uppercase tracking-wide ml-0.5">Issue Date</label>
-                        <input type="text" id="input-issue-date" placeholder="e.g. 01 January 2024" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none mt-1">
+            <!-- § 3 Entity Details -->
+            <div class="sidebar-section">
+                <div class="section-title"><span class="num">3</span> Entity Details</div>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    <div class="form-group">
+                        <label class="form-label" for="input-org-name">Organisation Name</label>
+                        <input type="text" id="input-org-name" placeholder="e.g. National Logistics Cell" oninput="syncFields()" class="form-input">
                     </div>
-                    <div>
-                        <label class="text-[9px] font-semibold text-slate-400 uppercase tracking-wide ml-0.5">Expiry Date</label>
-                        <input type="text" id="input-expiry-date" placeholder="e.g. 31 December 2026" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none mt-1">
+                    <div class="form-group">
+                        <label class="form-label" for="input-org-address">Organisation Address</label>
+                        <input type="text" id="input-org-address" placeholder="e.g. Plot 5, Industrial Area, Lahore" oninput="syncFields()" class="form-input">
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                        <div class="form-group">
+                            <label class="form-label" for="input-add-title">Addressed To — Name</label>
+                            <input type="text" id="input-add-title" placeholder="e.g. Mr. Ahmed Khan" oninput="syncFields()" class="form-input form-input-sm">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="input-add-org">Addressed To — Org</label>
+                            <input type="text" id="input-add-org" placeholder="e.g. NLC HQ" oninput="syncFields()" class="form-input form-input-sm">
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <label class="text-[9px] font-semibold text-slate-400 uppercase tracking-wide ml-0.5">Scope of Certification</label>
-                    <textarea id="input-scope" rows="3" oninput="syncFields()" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none mt-1 resize-none"></textarea>
-                    <button onclick="autoFillScope()" class="text-[9px] text-[#006e96] font-semibold mt-1 hover:underline">
-                        <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Auto-fill from cert type
-                    </button>
+            </div>
+
+            <!-- § 4 Certificate Parameters -->
+            <div class="sidebar-section">
+                <div class="section-title"><span class="num">4</span> Certificate Parameters</div>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    <div class="form-group">
+                        <label class="form-label" for="input-ref-no">Reference Number</label>
+                        <input type="text" id="input-ref-no" placeholder="e.g. PCAA/AVSEC/2024/001" oninput="syncFields()" class="form-input">
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                        <div class="form-group">
+                            <label class="form-label" for="input-issue-date">Issue Date</label>
+                            <input type="text" id="input-issue-date" placeholder="01 January 2024" oninput="syncFields()" class="form-input form-input-sm">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="input-expiry-date">Expiry Date</label>
+                            <input type="text" id="input-expiry-date" placeholder="31 December 2026" oninput="syncFields()" class="form-input form-input-sm">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="input-scope">Scope of Certification</label>
+                        <textarea id="input-scope" rows="3" oninput="syncFields()" class="form-input" style="margin-top:2px;"></textarea>
+                        <button onclick="autoFillScope()" class="btn-link" style="margin-top:4px;">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-fill from certificate type
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- 5. Signatory -->
-            <div class="space-y-2.5">
-                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">5. Signatory</h2>
-                <input type="text" id="input-sig-name" placeholder="Signatory Name (e.g. Air Cdre Aamir Siddiqui)" oninput="syncFields()" value="Director General Security" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
-                <input type="text" id="input-sig-title" placeholder="Signatory Title" oninput="syncFields()" value="Director Security, PCAA" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
+            <!-- § 5 Signatory -->
+            <div class="sidebar-section">
+                <div class="section-title"><span class="num">5</span> Signatory</div>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    <div class="form-group">
+                        <label class="form-label" for="input-sig-name">Signatory Name</label>
+                        <input type="text" id="input-sig-name" placeholder="e.g. Air Cdre Aamir Siddiqui" oninput="syncFields()" value="Director General Security" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="input-sig-title">Signatory Title</label>
+                        <input type="text" id="input-sig-title" placeholder="e.g. Director Security, PCAA" oninput="syncFields()" value="Director Security, PCAA" class="form-input">
+                    </div>
+                </div>
             </div>
 
-            <!-- 6. QR -->
-            <div class="space-y-2.5">
-                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">6. QR Security Registry</h2>
-                <input type="text" id="input-qr-data" oninput="generateQRCode()" placeholder="Verification URL or Registry ID" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs focus:ring-2 focus:ring-[#006e96]/30 outline-none">
+            <!-- § 6 QR -->
+            <div class="sidebar-section">
+                <div class="section-title"><span class="num">6</span> QR Security Registry</div>
+                <div class="form-group">
+                    <label class="form-label" for="input-qr-data">Verification URL or Registry ID</label>
+                    <input type="text" id="input-qr-data" oninput="generateQRCode()" placeholder="https://verify.pcaa.gov.pk/cert/..." class="form-input">
+                </div>
             </div>
 
         </aside>
 
         <!-- CERTIFICATE PREVIEW -->
-        <main class="flex-grow p-6 flex flex-col items-center bg-slate-100 overflow-y-auto">
+        <main class="flex-grow flex flex-col items-center overflow-y-auto" style="background:#dde3ea;padding:24px 32px;">
+
+            <!-- Preview meta bar -->
+            <div style="width:100%;max-width:950px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;box-shadow:0 0 0 3px rgba(34,197,94,0.2);"></span>
+                    <span style="font-size:11px;font-weight:600;color:#475569;letter-spacing:0.03em;">Live Preview — A4 Landscape</span>
+                </div>
+                <span style="font-size:10px;color:#94a3b8;font-weight:500;">Changes reflect instantly</span>
+            </div>
+
             <div class="preview-outer-container" id="scale-outer">
                 <div class="cert-canvas-wrapper" id="certificate-target">
 
@@ -663,24 +819,65 @@
             });
         }
 
+        // ── Toast ──
+        let toastTimer;
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            const icon = t.querySelector('.toast-icon i');
+            t.className = '';          // reset classes
+            t.classList.add(type);
+            document.getElementById('toast-msg').textContent = msg;
+            if (type === 'success') icon.className = 'fa-solid fa-check';
+            else if (type === 'error') icon.className = 'fa-solid fa-xmark';
+            else icon.className = 'fa-solid fa-spinner fa-spin';
+            void t.offsetWidth;        // force reflow for transition
+            t.classList.add('show');
+            clearTimeout(toastTimer);
+            if (type !== 'loading') toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+        }
+
+        // ── Export PDF ──
         function exportHighResPDF() {
+            const org = document.getElementById('input-org-name').value || 'Certificate';
+            const ref = document.getElementById('input-ref-no').value;
+            const filename = ref
+                ? `PCAA_AVSEC_${ref.replace(/\//g,'_')}.pdf`
+                : `PCAA_AVSEC_${org.replace(/\s+/g,'_')}_${Date.now()}.pdf`;
+
+            showToast('Generating PDF…', 'loading');
+
             const el = document.getElementById('certificate-target');
             const opt = {
                 margin: 0,
-                filename: `PCAA_AVSEC_Certificate_${Date.now()}.pdf`,
+                filename,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 3, useCORS: true, logging: false },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
             };
-            html2pdf().set(opt).from(el).save();
+            html2pdf().set(opt).from(el).save()
+                .then(() => showToast('PDF exported successfully', 'success'))
+                .catch(() => showToast('Export failed — try again', 'error'));
         }
 
-        // Responsive scaling
+        // ── Reset form ──
+        function resetForm() {
+            ['input-org-name','input-org-address','input-add-title','input-add-org',
+             'input-ref-no','input-issue-date','input-expiry-date','input-scope','input-qr-data']
+                .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+            document.getElementById('input-cert-type').selectedIndex = 0;
+            document.getElementById('input-sig-name').value  = 'Director General Security';
+            document.getElementById('input-sig-title').value = 'Director Security, PCAA';
+            autoFillScope();
+            generateQRCode();
+            showToast('Form cleared', 'success');
+        }
+
+        // ── Responsive scaling ──
         function scalePreview() {
             const wrapper = document.querySelector('.cert-canvas-wrapper');
             const outer   = document.getElementById('scale-outer');
             if (!wrapper || !outer) return;
-            const availW  = outer.clientWidth - 48;
+            const availW  = outer.clientWidth - 64;
             const scale   = Math.min(1, availW / 950);
             wrapper.style.transform = `scale(${scale})`;
             outer.style.height = `${Math.round(671 * scale)}px`;
